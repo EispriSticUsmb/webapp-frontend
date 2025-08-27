@@ -1,0 +1,90 @@
+@let isLoggedIn = isLoggedIn$ | async;
+@let user = user$ | async;
+<nav class="bg-base100 border-b border-base300 ">
+  <div class="max-w-[90rem] mx-auto px-6 lg:px-8">
+    <div class="flex justify-between h-20 items-center">
+
+      <div class="flex items-center">
+        <a routerLink="/" class="text-primary font-bold text-xl">
+          <img src="/logo.png" class="w-[6vh]">
+        </a>
+      </div>
+
+      <div class="hidden md:flex space-x-6">
+        <a routerLink="/" class="text-base-content hover:text-primary text-xl uppercase">ACCUEIL</a>
+        <a routerLink="/event" class="text-base-content hover:text-primary text-xl uppercase">ÉVÉNEMENTS</a>
+        <a routerLink="/contact" class="text-base-content hover:text-primary text-xl uppercase">CONTACT</a>
+        <a href="https://eispri-stic.sumupstore.com/produits" class="text-base-content hover:text-primary text-xl uppercase">BOUTIQUE</a>
+        @if(user?.role==='ADMIN') { <a routerLink="/admin" class="text-error hover:text-error-content text-xl uppercase">ADMIN</a> }
+      </div>
+
+      <div class="hidden md:flex items-center space-x-4">
+        @if (isLoggedIn) {
+          <div id="avatarButton" class="relative" (click)="toggleMenu()">
+            <img class="h-14 w-14 rounded-full cursor-pointer border-2 border-primary"
+                 [src]="user?.profileImage || default_pdp(user?.userType || 'AUTRE')" alt="Profil">
+
+            @if (menuOpen()) {
+              <div id="avatarMenu" class="absolute right-0 mt-2 bg-base100 border border-base300 rounded-lg shadow-lg py-2">
+                <p class="px-4 py-2 text-center text-accent-content capitalize">{{ user?.username }}</p>
+                <a routerLink="/profile" class="block px-4 py-2 hover:bg-base200 cursor-pointer">Profil</a>
+                <button (click)="logout()" class="w-full text-left px-4 py-2 text-error hover:bg-base200 cursor-pointer">Déconnexion</button>
+              </div>
+            }
+          </div>
+        } @else {
+          <a routerLink="/login" class="btn-primary">
+            Se connecter
+          </a>
+        }
+      </div>
+
+    <div class="md:hidden flex items-center relative w-6 h-6">
+      <button (click)="toggleMobile()" class="relative w-full h-full">
+
+        <svg
+          class="absolute inset-0 w-full h-full transition-opacity duration-300"
+          [class]="mobileOpen() ? 'opacity-0' : 'opacity-100'"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+        >
+          <path stroke-linecap="round" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+
+        <svg
+          class="absolute inset-0 w-full h-full transition-opacity duration-300"
+          [class]="mobileOpen() ? 'opacity-100' : 'opacity-0'"
+          viewBox="0 0 28 28"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path d="M2.32129 2.32363C2.72582 1.9191 3.38168 1.9191 3.78621 2.32363L25.6966 24.234C26.1011 24.6385 26.1011 25.2944 25.6966 25.6989C25.2921 26.1035 24.6362 26.1035 24.2317 25.6989L2.32129 3.78854C1.91676 3.38402 1.91676 2.72815 2.32129 2.32363Z" fill="#000000"/>
+          <path d="M25.6787 2.30339C25.2742 1.89887 24.6183 1.89887 24.2138 2.30339L2.30339 24.2138C1.89887 24.6183 1.89887 25.2742 2.30339 25.6787C2.70792 26.0832 3.36379 26.0832 3.76831 25.6787L25.6787 3.76831C26.0832 3.36379 26.0832 2.70792 25.6787 2.30339Z" fill="#000000"/>
+        </svg>
+
+      </button>
+    </div>
+    </div>
+  </div>
+
+  @if (mobileOpen()) {
+    <div class="md:hidden px-2 pt-2 pb-3 space-y-1 bg-base100 border-t border-base300">
+      <a routerLink="/" class="block px-3 py-2 rounded-md text-base-content hover:bg-base200">Accueil</a>
+      <a routerLink="/event" class="block px-3 py-2 rounded-md text-base-content hover:bg-base200">Évent</a>
+      <a routerLink="/contact" class="block px-3 py-2 rounded-md text-base-content hover:bg-base200">Contact</a>
+      <a href="https://eispri-stic.sumupstore.com/produits" class="block px-3 py-2 rounded-md text-base-content hover:bg-base200">Boutique</a>
+      @if(user?.role==='ADMIN') { <a routerLink="/admin" class="block px-3 py-2 rounded-md text-error hover:bg-base200">Admin</a> }
+      <div class="border-t border-base300 mt-2 pt-2">
+        @if (isLoggedIn) {
+          <p class="px-4 py-2 text-center text-accent-content capitalize">{{ user?.username }}</p>
+          <a routerLink="/profile" class="block px-3 py-2 rounded-md text-base-content hover:bg-base200">Profil</a>
+          <button (click)="logout()" class="w-full text-left px-3 py-2 rounded-md text-error hover:bg-base200 cursor-pointer">Déconnexion</button>
+        } @else {
+          <a routerLink="/login" class="block px-3 py-2 rounded-md bg-primary text-primary-content hover:bg-primary/80">Se connecter</a>
+        }
+      </div>
+    </div>
+  }
+</nav>

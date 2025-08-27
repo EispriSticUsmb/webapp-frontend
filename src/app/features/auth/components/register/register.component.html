@@ -1,0 +1,143 @@
+<h2 class="m-3 text-3xl text-center">Inscription</h2>
+<form [formGroup]="registerForm" (submit)="submit($event)" class="flex flex-col items-center gap-5 mt-6">
+  @if(errorMessage()) {
+    <p class="my-3 p-0.5 rounded-sm px-4 text-error-content bg-error">{{ errorMessage() }}</p>
+  }
+  <div>
+      <label 
+        class="relative"
+        for="firstName"
+      >
+        <input
+          id="firstName"
+          class="peer mt-0.5 w-full rounded shadow-sm outline-0 sm:text-sm border-2 p-2 capitalize"
+          [class]=" (firstName?.invalid && (firstName?.dirty || firstName?.touched)) ? 'border-error' : 'border-base300 focus:border-primary'"
+          placeholder=""
+          formControlName="firstName" />
+        <span
+          class="absolute inset-y-0 start-3 -translate-y-5 bg-base100 px-0.5 text-sm font-medium transition-transform peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-5"
+        >
+          Prénom
+        </span>
+      </label>
+    @if(firstName?.invalid && ( firstName?.dirty || firstName?.touched )) {
+      @if(firstName?.hasError('required')) {
+        <span class="block text-error text-sm">Veuillez entrer votre prénom !</span>
+      }
+    }
+  </div>
+
+  <div>
+    <label
+      class="relative"
+      for="lastName"
+    >
+      <input
+        id="lastName"
+        class="peer mt-0.5 w-full rounded shadow-sm sm:text-sm outline-0 border-2 p-2 uppercase"
+        [class]=" (lastName?.invalid && (lastName?.dirty || lastName?.touched)) ? 'border-error' : 'border-base300 focus:border-primary'"
+        placeholder=""
+        formControlName="lastName"
+      />
+      <span
+        class="absolute inset-y-0 start-3 -translate-y-5 bg-base100 px-0.5 text-sm font-medium transition-transform peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-5"
+      >
+        Nom
+      </span>
+    </label>
+    @if(lastName?.invalid && ( lastName?.dirty || lastName?.touched )) {
+      @if(lastName?.hasError('required')) {
+        <span class="block text-error text-sm">Veuillez entrer votre nom !</span>
+      }
+    }
+  </div>
+
+  <div>
+    <label class="relative" for="username">
+      <input
+        id="username"
+        class="peer mt-0.5 w-full rounded shadow-sm sm:text-sm outline-0 border-2 p-2 lowercase"
+        [class]=" (username?.invalid && (username?.dirty || username?.touched)) ? 'border-error' : 'border-base300 focus:border-primary'"
+        placeholder="" 
+        formControlName="username" />
+      <span
+        class="absolute inset-y-0 start-3 -translate-y-5 bg-base100 px-0.5 text-sm font-medium transition-transform peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-5"
+      >
+        Pseudo
+      </span>
+    </label>
+    @if(username?.invalid && ( username?.dirty || username?.touched )) {
+      @if(username?.hasError('required')) {
+        <span class="block text-error text-sm">Veuillez entrer votre pseudo !</span>
+      } @else {
+          <span class="block text-error text-sm">Le caractère &#64; n'est pas autorisé !</span>
+      }
+    }
+  </div>
+
+  <div>
+    <label 
+      class="relative"
+      for="Email"
+    >
+      <input
+        id="Email"
+        type="email"
+        class="peer mt-0.5 w-full rounded shadow-sm sm:text-sm border-2 outline-0 p-2 lowercase"
+        [class]=" (email?.invalid && (email?.dirty || email?.touched)) ? 'border-error' : 'border-base300 focus:border-primary'"
+        placeholder=""
+        formControlName="email"
+      />
+      <span
+        class="absolute inset-y-0 start-3 -translate-y-5 bg-base100 px-0.5 text-sm font-medium transition-transform peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-5"
+      >
+        Email
+      </span>
+    </label>
+    @if(email?.invalid && ( email?.dirty || email?.touched )) {
+      @if(email?.hasError('required')) {
+        <span class="block text-red-600 text-sm">Veuillez entrer un e-mail !</span>
+      }
+      @else {
+        <span class="block text-red-600 text-sm">Veuillez entrer un e-mail valide !</span>
+      }    
+    }
+  </div>
+
+  <div>
+    <label class="relative" for="Password">
+      <input 
+        id="Password"
+        type="password"
+        class="peer mt-0.5 w-full rounded shadow-sm sm:text-sm outline-0 border-2 p-2"
+        [class]=" (password?.invalid && (password?.dirty || password?.touched)) ? 'border-error' : 'border-base300 focus:border-primary'"
+        placeholder=""
+        formControlName="password"
+      />
+      <span
+        class="absolute inset-y-0 start-3 -translate-y-5 bg-base100 px-0.5 text-sm font-medium transition-transform peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-5"
+      >Mot de passe</span>
+    </label>
+  @if(password?.invalid && ( password?.dirty || password?.touched )) {
+    <span class="block text-red-600 text-sm">Veuillez entrer un mot de passe !</span>
+  }
+  </div>
+
+  <div class="mb-3">
+  <p class="mb-6">Je suis un(e) ... </p>
+  <label class="p-1.5 border border-secondary rounded-l-xl pl-2 cursor-pointer has-checked:bg-base300 has-checked:border-primary">
+    <input type="radio" formControlName="UserType" value="ETUDIANT" class="sr-only" /> Étudiant
+  </label>
+  <label class="p-1.5 border border-secondary cursor-pointer has-checked:bg-base300 has-checked:border-primary">
+    <input type="radio" formControlName="UserType" value="ENSEIGNANT" class="sr-only"/> Enseignant
+  </label>
+  <label class="p-1.5 border border-secondary cursor-pointer has-checked:bg-base300 has-checked:border-primary">
+    <input type="radio" formControlName="UserType" value="ANCIEN" class="sr-only"/> Ancien
+  </label>
+  <label class="p-1.5 border border-secondary rounded-r-xl pr-2 cursor-pointer has-checked:bg-base300 has-checked:border-primary">
+    <input type="radio" formControlName="UserType" value="AUTRE" class="sr-only"/> Autre
+  </label> 
+  </div>
+
+  <button type="submit" [disabled]="registerForm.invalid || RegisterInProgress()" class="btn-primary">S'enregister</button>
+</form>

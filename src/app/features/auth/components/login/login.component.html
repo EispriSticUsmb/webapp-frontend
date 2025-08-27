@@ -1,0 +1,47 @@
+<h2 class="m-3 text-3xl text-center">Connexion</h2>
+<form [formGroup]="loginForm" (submit)="submit($event)" class="flex flex-col items-center gap-5 mt-6">
+  @if(errorMessage()) {
+    <p class="my-3 p-1 rounded-2xl px-4 text-error-content bg-error">{{ errorMessage() }}</p>
+  }
+  <div class="my-2">
+    <label for="identifiant" class="relative">
+      <input 
+        id="identifiant"
+        class="peer mt-0.5 w-full rounded shadow-sm sm:text-sm outline-0 border-2 p-2"
+        [class]=" (identifier?.invalid && (identifier?.dirty || identifier?.touched)) ? 'border-error' : 'border-base300 focus:border-primary'"
+        placeholder="" 
+        formControlName="identifier"
+      />
+      <span
+        class="absolute inset-y-0 start-3 -translate-y-5 bg-base100 px-0.5 text-sm font-medium transition-transform peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-5"
+      >
+        email / pseudo
+      </span>
+    </label>
+    @if(identifier?.invalid && ( identifier?.dirty || identifier?.touched )) {
+      <span class="block text-error text-sm">Veuillez saisir un identifiant !</span>
+    }
+  </div>
+
+  <div class="my-2">
+    <label for="Password" class="relative">
+      <input 
+        id="Password" 
+        type="password" 
+        placeholder="" 
+        class="peer mt-0.5 w-full rounded shadow-sm sm:text-sm outline-0 border-2 p-2" 
+        [class]=" (password?.invalid && (password?.dirty || password?.touched)) ? 'border-error' : 'border-base300 focus:border-primary'"
+        formControlName="password"
+      />
+      <span 
+        class="absolute inset-y-0 start-3 -translate-y-5 bg-base100 px-0.5 text-sm font-medium transition-transform peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-5">
+          Mot de passe
+      </span>
+    </label>
+    @if(password?.invalid && ( password?.dirty || password?.touched )) {
+      <span class="block text-error text-sm">Veuillez saisir un mot de passe !</span>
+    }
+  </div>
+
+  <button type="submit" [disabled]="loginForm.invalid || loginInProgress()" class="px-4 py-2 rounded-lg bg-primary text-primary-content hover:bg-primary/80 transition-colors duration-200">Se connectez</button>
+</form>
