@@ -26,7 +26,7 @@ export function authInterceptor(
 
   return next(authReq).pipe(
     catchError(err => {
-      if (err.status === 401 && !req.url.includes('/auth/refresh')
+      if (err.status === 401 && !req.url.includes('/auth/refresh') && !req.url.includes('/auth/logout')
         && !req.url.includes('/auth/login') 
         && err.error.message==='Access denied: invalid or expired token') {
         return handle401Error(req, next, authService, err);
