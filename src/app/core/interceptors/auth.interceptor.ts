@@ -61,7 +61,6 @@ function handle401Error(
         return next(addTokenHeader(req, newAccessToken));
       }),
       catchError(err => {
-        console.log("refreshtoken"+err.error.message)
         isRefreshing = false;
         refreshTokenSubject.next(null);
         authService.logout();
