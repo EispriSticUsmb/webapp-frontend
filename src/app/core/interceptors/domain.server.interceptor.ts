@@ -6,15 +6,16 @@ export function domainInterceptorServer(
   req: HttpRequest<unknown>,
   next: HttpHandlerFn
 ): Observable<HttpEvent<unknown>> {
-  if (!req.url.startsWith('http')) {
-    let envApiUrl = process.env['API_URL_SSR'] || environment.apiUrl;
+  let envApiUrl = process.env['API_URL_SSR'] || environment.apiUrl;
+  if(envApiUrl.endsWith('/')){
+    envApiUrl = envApiUrl.substring(0, envApiUrl.length - 1);
+  }
+  if (!req.url.startsWith(envApiUrl)) {
     let reqUrl = req.url;
     if(reqUrl.startsWith('/')){
       reqUrl = reqUrl.substring(1);
     }
-    if(envApiUrl.endsWith('/')){
-      envApiUrl = envApiUrl.substring(0, envApiUrl.length - 1);
-    }
+
     const updatedReq = req.clone({
       url: envApiUrl + "/" + reqUrl
   });
