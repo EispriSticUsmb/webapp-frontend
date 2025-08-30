@@ -8,8 +8,8 @@ import { ContactComponent } from './features/public/contact/contact.component';
 import { AuthComponent } from './features/auth/pages/auth/auth.component';
 import { AuthGuard } from './core/auth/authGuard';
 import { adminGuard } from './core/auth/adminGuard';
-import { ShopRedirectComponent } from './features/auth/pages/redirect/shop.component';
-import { DiscordRedirectComponent } from './features/auth/pages/redirect/discord.component';
+import { ShopRedirectComponent } from './features/redirect/shop.component';
+import { DiscordRedirectComponent } from './features/redirect/discord.component';
 
 export const routes: Routes = [
     {
