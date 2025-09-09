@@ -20,9 +20,17 @@
           Prénom
         </span>
       </label>
-    @if(firstName?.invalid && ( firstName?.dirty || firstName?.touched )) {
-      @if(firstName?.hasError('required')) {
-        <span class="block text-error text-sm">Veuillez entrer votre prénom !</span>
+    @if (firstName?.invalid && (firstName?.dirty || firstName?.touched)) {
+      @switch (true) {
+        @case (firstName?.hasError('required')) {
+          <span class="block text-error text-sm">Veuillez entrer votre prénom !</span>
+        }
+        @case (firstName?.hasError('pattern')) {
+          <span class="block text-error text-sm">Caractère(s) interdit !</span>
+        }
+        @case (firstName?.hasError('maxlength')) {
+          <span class="block text-error text-sm">Trop de caractères !</span>
+        }
       }
     }
   </div>
@@ -45,9 +53,17 @@
         Nom
       </span>
     </label>
-    @if(lastName?.invalid && ( lastName?.dirty || lastName?.touched )) {
-      @if(lastName?.hasError('required')) {
-        <span class="block text-error text-sm">Veuillez entrer votre nom !</span>
+    @if (lastName?.invalid && (lastName?.dirty || lastName?.touched)) {
+      @switch (true) {
+        @case (lastName?.hasError('required')) {
+          <span class="block text-error text-sm">Veuillez entrer votre nom !</span>
+        }
+        @case (lastName?.hasError('pattern')) {
+          <span class="block text-error text-sm">Caractère(s) interdit !</span>
+        }
+        @case (lastName?.hasError('maxlength')) {
+          <span class="block text-error text-sm">Trop de caractères !</span>
+        }
       }
     }
   </div>
@@ -66,11 +82,22 @@
         Pseudo
       </span>
     </label>
-    @if(username?.invalid && ( username?.dirty || username?.touched )) {
-      @if(username?.hasError('required')) {
-        <span class="block text-error text-sm">Veuillez entrer votre pseudo !</span>
-      } @else {
-          <span class="block text-error text-sm">Le caractère &#64; n'est pas autorisé !</span>
+    @if (username?.invalid && (username?.dirty || username?.touched)) {
+      @switch (true) {
+        @case (username?.hasError('required')) {
+          <span class="block text-error text-sm">Veuillez entrer votre pseudo !</span>
+        }
+        @case (username?.hasError('minlength')) {
+          <span class="block text-error text-sm">Au moins 3 caractères !</span>
+        }
+        @case (username?.hasError('maxlength')) {
+          <span class="block text-error text-sm">Trop de caractères !</span>
+        }
+        @case (username?.hasError('pattern')) {
+          <span class="block text-error text-sm">
+            Caractère(s) interdit !
+          </span>
+        }
       }
     }
   </div>
@@ -94,13 +121,18 @@
         Email
       </span>
     </label>
-    @if(email?.invalid && ( email?.dirty || email?.touched )) {
-      @if(email?.hasError('required')) {
-        <span class="block text-red-600 text-sm">Veuillez entrer un e-mail !</span>
+    @if (email?.invalid && (email?.dirty || email?.touched)) {
+      @switch (true) {
+        @case (email?.hasError('required')) {
+          <span class="block text-red-600 text-sm">Veuillez entrer un e-mail !</span>
+        }
+        @case (email?.hasError('email')) {
+          <span class="block text-red-600 text-sm">Veuillez entrer un e-mail valide !</span>
+        }
+        @case (email?.hasError('maxlength')) {
+          <span class="block text-red-600 text-sm">Trop de caractères !</span>
+        }
       }
-      @else {
-        <span class="block text-red-600 text-sm">Veuillez entrer un e-mail valide !</span>
-      }    
     }
   </div>
 
@@ -118,9 +150,19 @@
         class="absolute inset-y-0 start-3 -translate-y-5 bg-base100 px-0.5 text-sm font-medium transition-transform peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-5"
       >Mot de passe</span>
     </label>
-  @if(password?.invalid && ( password?.dirty || password?.touched )) {
-    <span class="block text-red-600 text-sm">Veuillez entrer un mot de passe !</span>
-  }
+    @if (password?.invalid && (password?.dirty || password?.touched)) {
+      @switch (true) {
+        @case (password?.hasError('required')) {
+          <span class="block text-red-600 text-sm">Veuillez entrer un mot de passe !</span>
+        }
+        @case (password?.hasError('minlength')) {
+          <span class="block text-red-600 text-sm">Au moins 8 caractères !</span>
+        }
+        @case (password?.hasError('maxlength')) {
+          <span class="block text-red-600 text-sm">Trop de caractères !</span>
+        }
+      }
+    }
   </div>
 
   <div class="mb-3">

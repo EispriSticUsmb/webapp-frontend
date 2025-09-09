@@ -21,11 +21,11 @@ export class RegisterComponent {
   registerReq : Subscription | null = null;
 
   registerForm = this.formBuilder.group({
-    email: ['', [Validators.required, Validators.email]],
-    username: ['', [Validators.required]],
-    password: ['', [Validators.required]],
-    firstName: ['', [Validators.required]],
-    lastName: ['', [Validators.required]],
+    email: ['', [Validators.required, Validators.email, Validators.maxLength(64)]],
+    username: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+$/), Validators.maxLength(16), Validators.minLength(3)]],
+    password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(32)]],
+    firstName: ['', [Validators.required, Validators.pattern(/^[A-Za-zÀ-ÖØ-öø-ÿ'-]+$/), Validators.maxLength(80)]],
+    lastName: ['', [Validators.required, Validators.pattern(/^[A-Za-zÀ-ÖØ-öø-ÿ'-]+$/), Validators.maxLength(100)]],
     UserType: ['ETUDIANT', [Validators.required]],
   })
 
