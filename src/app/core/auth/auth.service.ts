@@ -20,7 +20,6 @@ export class AuthService {
     this.http.post('/auth/logout', null, { withCredentials : true }).subscribe()
     this.accessToken$.next(null);
     this._user$.next(null);
-    this.router.navigate(['/']);
   }
   
   loadUser() {
