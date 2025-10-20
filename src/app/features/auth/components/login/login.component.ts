@@ -1,8 +1,8 @@
 import { Component, EventEmitter, inject, Output, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import { AuthService } from '../../../../core/auth/auth.service';
-import { HttpErrorResponse, HttpEvent } from '@angular/common/http';
-import { Observable, Subscription } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-login',

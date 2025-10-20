@@ -17,7 +17,7 @@ export class AuthComponent implements OnInit {
   isLoggedIn: boolean = false;
   router = inject(Router);
   location = inject(Location);
-  activeTab: 'register' | 'login' = 'login';
+  activeTab = signal<'register' | 'login'>('login');
 
   ReqSuccess() {
     this.router.navigate(['/']);
@@ -26,19 +26,19 @@ export class AuthComponent implements OnInit {
   SwitchTab(tab: string) {
     if(tab==='register') {
       this.location.go("/register");
-      this.activeTab = 'register';
+      this.activeTab.set('register');
     }
     else {
       this.location.go("/login");
-      this.activeTab = 'login';
+      this.activeTab.set('login');
     }
   }
 
   ngOnInit(): void {
     if (this.router.url === '/register') {
-      this.activeTab = 'register';
+      this.activeTab.set('register');
     } else {
-      this.activeTab = 'login';
+      this.activeTab.set('login');
     }
     this.authservice.isLoggedIn$().pipe(take(1)).subscribe(isLoggedIn =>  {
       if(isLoggedIn) {
