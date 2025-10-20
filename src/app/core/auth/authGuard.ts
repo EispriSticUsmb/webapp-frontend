@@ -1,34 +1,19 @@
-import { inject, Injectable } from '@angular/core';
-import { CanMatch, Route, Router } from '@angular/router';
-import { Observable } from 'rxjs';
-import { filter, take, map, tap } from 'rxjs/operators';
+import { inject } from '@angular/core';
+import { CanActivateFn, Router } from '@angular/router';
+import { take, map, tap } from 'rxjs/operators';
 import { AuthService } from './auth.service';
 
-@Injectable({ providedIn: 'root' })
-export class AuthGuard implements CanMatch {
-  private router = inject(Router);
-  private auth = inject(AuthService);
+export const authGuard: CanActivateFn = () => {
+  const auth = inject(AuthService);
+  const router = inject(Router);
 
-
-  canActivate(): Observable<boolean> {
-    return this.auth.user$.pipe(
-      filter(u => u !== undefined),
-      take(1),
-      map(user => !!user),
-      tap(isLoggedIn => {
-        if (!isLoggedIn) this.router.navigate(['/']);
-      })
-    );
-  }
-
-  canMatch(route: Route): Observable<boolean> {
-    return this.auth.user$.pipe(
-      filter(u => u !== undefined),
-      take(1),
-      map(user => !!user),
-      tap(isLoggedIn => {
-        if (!isLoggedIn) this.router.navigate(['/login']);
-      })
-    );
-  }
-}
+  return auth.user$.pipe(
+    take(1),
+    map(user => !!user),
+    tap(isLoggedIn => {
+      if (!isLoggedIn) {
+        router.navigate(['/']);
+      }
+    })
+  );
+};

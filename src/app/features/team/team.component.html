@@ -1,0 +1,158 @@
+@if(popup()) {
+    <popup (clickOutside)="closePopUp()">
+        <div class="flex justify-center flex-col h-full m-5">
+            <form class="text-center" (ngSubmit)="renameTeam()" [formGroup]="form">
+                <label 
+                class="relative mt-3"
+                for="nameEvent"
+                >
+                <input
+                    id="nameEvent"
+                    class="peer mt-0.5 w-full rounded shadow-sm sm:text-sm border-2 outline-0 p-2"
+                    [class]=" (name.invalid && (name.dirty || name.touched)) ? 'border-error' : 'border-base300 focus:border-primary'"
+                    placeholder=""
+                    formControlName="name"
+                />
+                <span
+                    class="absolute inset-y-0 start-3 -translate-y-5 bg-base100 px-0.5 text-sm font-medium transition-transform peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-5"
+                >
+                    Nom de l'équipe
+                </span>
+                </label>
+                <div class="mb-3">
+                    @if (name.invalid && (name.dirty || name.touched)) {
+                        @if (name.hasError('required')) {
+                            <span class="block text-red-600 text-sm">Veuillez entrer un nom !</span>
+                        }
+                        @if (name.hasError('maxlength')) {
+                        <span class="block text-red-600 text-sm">Trop de caractères !</span>
+                        }
+                    }
+                </div>
+                
+                <button type="submit" (onclick)="renameTeam()" class="btn-primary" [disabled]="name.invalid">
+                    Créer
+                </button>
+            </form>
+        </div>
+    </popup>
+}
+@switch (status()) {
+    @case ('found') {
+        <h2 class="my-10 text-center text-3xl animate-[typing]">
+            {{ team()?.name }}
+        </h2>
+        @if(errorMessage()) {
+            <div class="text-center">
+                <p class="my-3 p-0.5 rounded-sm px-4 text-error-content bg-error inline-block">{{ errorMessage() }}</p>
+            </div>
+        }
+        @if(invitedUser()) {
+        <div 
+            class="mx-auto text-center justify-around min-w-[350px] w-1/2 mt-3 rounded-b-4xl rounded-r-4xl p-2 pr-6 hover:bg-info/80 hover:text-secondary-content bg-info text-info-content"
+            >
+                <p class="text-center text-2xl inline">
+                    Vous êtes invité à rejoindre l'équipe
+                </p>
+                <div class="flex justify-evenly w-9/12 mx-auto">
+                    <img (click)="acceptInv()" class="w-11 inline hover:scale-125 transition-all mr-1 rounded-full p-2 bg-success" src="/assets/done.svg" alt="">
+                    <img (click)="declineInv()" class="w-11 inline hover:scale-125 transition-all ml-1 rounded-full p-2 bg-error" src="/assets/close.svg" alt="">
+                </div>
+        </div>
+        }
+
+        <div class="text-center my-10 flex flex-row justify-center gap-4 flex-wrap">
+            <button 
+                (click)="SwitchTab('invitations')" 
+                class="text-2xl px-7 md:px-20 py-2 disabled:border-b-blue-500 disabled:border-b-4 cursor-pointer disabled:cursor-default" 
+                [disabled]="activeTab()==='membres'">
+                Membres
+            </button>
+            <button 
+                (click)="SwitchTab('membres')" 
+                class="text-2xl px-7 md:px-20 py-2 disabled:border-b-blue-500 disabled:border-b-4 cursor-pointer disabled:cursor-default" 
+                [disabled]="activeTab()==='invitations'">
+                Invitations
+            </button>
+        </div>
+        @if(activeTab() === 'membres') {
+            <div>
+                <div class="flex mt-10 items-center flex-col gap-3">
+                    @for (member of members(); track member.id) {
+                        <div class="flex items-center justify-around min-w-[350px] w-1/2 bg-base300 p-2 rounded-full hover:bg-secondary hover:text-secondary-content">
+                            <img class="w-14 rounded-full ml-3 md:ml-[10%]" src="{{ member.profileImage }}" alt="">
+                            <p class="flex-1 text-center truncate px-2">
+                                {{ member.username }}
+                            </p>
+                            <div class="flex-shrink-0 mr-3 md:mr-[10%]">
+                                @if(team()?.leaderId===member.id) {
+                                    <img class="w-8 animate-bounce" src="/assets/couronne.svg" alt="est le chef d'équipe">
+                                }@else {
+                                        <img [class]="isTeamMember() ? '' : 'invisible'" class="w-8 hover:scale-125 transition-all cursor-pointer" src="/assets/delete.svg" alt="supprimer" (click)="deleteTeamMember(member.id)">
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+    @if(user() && team()?.leaderId==user()?.id) {
+        <div class="text-center my-5">
+            <button (click)="openPopup()" class="btn-secondary block mx-auto my-5 cursor-pointer">Changer le nom d'équipe</button>
+            <button (click)="deleteTeam()" class="btn-primary hover:bg-error hover:text-error-content hover:border-error block mx-auto my-5 cursor-pointer">Supprimer l'équipe</button>
+        </div>
+    }
+        }
+    @else {
+
+            @if(inviteds().length===0) {
+                    <h3 class="text-center text-3xl my-8">Vous n'avez envoyé aucune invitation !</h3>
+            }
+                    <div class="text-center"> 
+            <label for="identifiant" class="relative">
+            <input #inviation
+                id="identifiant"
+                class="peer mt-0.5 rounded shadow-sm sm:text-sm outline-0 border-2 p-2 border-base300 focus:border-primary"
+                placeholder="" 
+            />
+            <span
+                class="absolute inset-y-0 start-3 -translate-y-5 bg-base200 px-0.5 text-sm font-medium transition-transform peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-5"
+            >
+                email / pseudo
+            </span>
+            </label>
+            <button (click)="invitClick(inviation.value)" class="btn-primary cursor-pointer">Envoyer</button>
+        </div>
+            <div>
+                <div class="flex mt-10 items-center flex-col gap-3">
+                    @for (invited of inviteds(); track invited.id) {
+                        <div 
+                        class="flex items-center justify-around min-w-[350px] w-1/2  p-2 rounded-full hover:bg-secondary hover:text-secondary-content"
+                        [class]=" user()?.id===invited.id ? 'bg-info text-info-content' : 'bg-base300' "
+                        >
+                            <img class="w-14 rounded-full ml-3 md:ml-[10%]" src="{{ invited.profileImage }}" alt="">
+                            <p class="flex-1 text-center truncate px-2">
+                                {{ invited.username }}
+                            </p>
+                            @if(user()?.id===invited.id) {
+                                <div class="flex-shrink-0 mr-3 md:mr-[10%]">
+                                    <img (click)="acceptInv()"  class="w-11 inline hover:scale-125 transition-all mr-1 rounded-full p-2 bg-success" src="/assets/done.svg" alt="">
+                                    <img (click)="declineInv()"  class="w-11 inline hover:scale-125 transition-all ml-1 rounded-full p-2 bg-error" src="/assets/close.svg" alt="">
+                                </div>
+                            } @else {
+                                <div class="flex-shrink-0 mr-3 md:mr-[10%]">
+                                    <img class="w-8 m-2 hover:scale-125 transition-all cursor-pointer" src="/assets/delete.svg" alt="supprimer" (click)="deleteTeamInv(invited.id)" [class]="isTeamMember() ? '' : 'invisible'">
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+    }
+}
+    @case ('loading') {
+        <spinner></spinner>
+    }
+    @default {
+        <app-not-found></app-not-found>
+    }
+}

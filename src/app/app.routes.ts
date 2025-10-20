@@ -6,10 +6,11 @@ import { ListEventsComponent } from './features/event/list-events/list-events.co
 import { NotFoundComponent } from './features/not-found/not-found.component';
 import { ContactComponent } from './features/public/contact/contact.component';
 import { AuthComponent } from './features/auth/pages/auth/auth.component';
-import { AuthGuard } from './core/auth/authGuard';
-import { adminGuard } from './core/auth/adminGuard';
 import { ShopRedirectComponent } from './features/redirect/shop.component';
 import { DiscordRedirectComponent } from './features/redirect/discord.component';
+import { TeamComponent } from './features/team/team.component';
+import { authGuard } from './core/auth/authGuard';
+import { NotificationsComponent } from './features/notifications/notifications.component';
 
 export const routes: Routes = [
     {
@@ -34,10 +35,11 @@ export const routes: Routes = [
     },
     {
         path: 'profile',
-        component: ProfileComponent,
         title: 'Profile | EISPRI STIC',
-        canMatch: [AuthGuard],
-        canActivate: [AuthGuard],
+        children: [
+            { path: '', component: ProfileComponent, canActivate: [authGuard]},
+            { path: 'notifications', component: NotificationsComponent, canActivate: [authGuard]}
+        ],
     },
     {
         path: 'event',
@@ -50,6 +52,14 @@ export const routes: Routes = [
         path: 'events',
         component: ListEventsComponent,
         title: "Événements | EISPRI STIC"
+    },
+    {
+        path: 'team',
+        children: [
+            {
+                path: ':id', component: TeamComponent,
+            }
+        ],
     },
     {
         path: 'boutique',
