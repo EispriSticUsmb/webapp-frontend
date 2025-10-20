@@ -33,9 +33,12 @@
 
 @layer components {
     .btn-primary {
-        @apply px-4 py-2 rounded-lg bg-primary text-primary-content hover:bg-primary/80 transition-colors duration-200;
+        @apply px-4 py-2 rounded-lg bg-primary text-primary-content hover:bg-primary/80 transition-colors duration-200 disabled:cursor-not-allowed;
     }
     .btn-secondary {
-        @apply px-4 py-2 rounded-2xl border-2 border-base-content transition-colors duration-200 hover:bg-primary hover:text-primary-content hover:border-primary;
+        @apply px-4 py-2 rounded-2xl border-2 border-base-content transition-colors duration-200 hover:bg-primary hover:text-primary-content hover:border-primary disabled:cursor-not-allowed; 
+    }
+    .btn-neutral {
+        @apply px-4 py-2 rounded-2xl border-2 text-base-content border-neutral transition-colors duration-200 hover:bg-neutral hover:text-neutral-content disabled:cursor-not-allowed;
     }
 }

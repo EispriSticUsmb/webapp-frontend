@@ -4,10 +4,11 @@ import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './header/header.component';
 import { AuthService } from './core/auth/auth.service';
 import { registerLocaleData } from '@angular/common';
+import { FooterComponent } from "./footer/footer.component";
 registerLocaleData(localeFr, 'fr');
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, HeaderComponent],
+  imports: [RouterOutlet, HeaderComponent, FooterComponent],
   templateUrl: './app.html',
   styleUrl: './app.css',
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }],
