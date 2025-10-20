@@ -1,5 +1,5 @@
 import { PartialUser, UserType } from './../user/user.model';
-import { AfterViewInit, Component, ElementRef, inject, OnDestroy, OnInit, signal, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, inject, OnDestroy, OnInit, PLATFORM_ID, signal, ViewChild } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../../core/auth/auth.service';
@@ -7,6 +7,8 @@ import { User } from '../user/user.model';
 import { UserService } from '../../core/user/user.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { SpinnerComponent } from "../spinner/spinner.component";
+import { environment } from '../../../environments/environment';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-profile.component',
@@ -18,6 +20,7 @@ export class ProfileComponent implements OnInit, OnDestroy, AfterViewInit{
   private formBuilder = inject(FormBuilder);
   private auth = inject(AuthService);
   private userService = inject(UserService);
+  private platformId = inject(PLATFORM_ID);
   errorMessage = signal<String | null>(null);
   userSub!: Subscription;
   user: User | undefined | null;
@@ -70,6 +73,13 @@ export class ProfileComponent implements OnInit, OnDestroy, AfterViewInit{
       next: () => {
         const user = this.user
         if(user?.profileImage) {
+          if (user.profileImage.startsWith('/default_pdp/')){
+            let envApiUrl = environment.apiUrl;
+            if(envApiUrl.endsWith('/')){
+              envApiUrl = envApiUrl.substring(0, envApiUrl.length - 1);
+            }
+            user.profileImage = envApiUrl + '/users/' + user.id + '/profileImage';
+          }
           user.profileImage = user.profileImage.split('?')[0] + '?cache='+Date.now();
           this.profilePictureDOM.nativeElement.src = user.profileImage;
         }
