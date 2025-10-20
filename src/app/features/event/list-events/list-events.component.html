@@ -1,1 +1,20 @@
-<p>list-events.component works!</p>
+@if(futureEvent().length===0 && oldEvent().length===0) {
+    <h2 class="text-center text-3xl my-6">Aucun événement passé ou à venir</h2>
+}
+
+@if (futureEvent().length>0) {
+    <h2 class="text-center text-3xl my-6">Prochains événements</h2>
+    <div class="container mx-auto flex justify-around flex-wrap mt-5 gap-3 items-center">
+    @for (event of futureEvent(); track event.id) {
+        <event-card [event]="event"></event-card>
+    }
+    </div>
+}
+@if (oldEvent().length) {
+    <h2 class="text-center text-3xl my-6">Anciens événements</h2>
+    <div class="container mx-auto flex justify-center flex-wrap mt-5 gap-3 items-center">
+    @for (event of oldEvent(); track event.id) {
+        <event-card [event]="event"></event-card>
+    }
+    </div>
+}

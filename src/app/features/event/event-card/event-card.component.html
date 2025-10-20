@@ -1,0 +1,16 @@
+<div class="rounded-2xl w-[360px] overflow-hidden flex flex-col bg-base100 shadow-xl">
+    <img class="border-b border-primary h-48 object-cover" [src]="imageUrl">
+    <div class="flex flex-col p-2">
+        <div class="flex justify-between items-center w-full">
+            <div class="font-bold">{{event.title}}</div>
+            <div class="flex flex-col text-right">
+                <div>{{ event.startDate | date:'short':'Europe/Paris':'fr-FR' }}</div>
+                <div>{{ event.location }}</div>
+            </div>
+        </div>
+        <div class="mt-4 line-clamp-3 pr-5 min-h-[72px] text-justify">
+            {{ event.descriptionSummary }}
+        </div>
+        <a class="btn-secondary text-center cursor-pointer mt-6" [routerLink]="['/event',event.id]">En savoir plus</a>
+    </div>
+</div>
