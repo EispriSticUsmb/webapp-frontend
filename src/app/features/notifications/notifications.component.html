@@ -1,0 +1,47 @@
+<div class="container mx-auto">
+    @if(!user()?.notifications?.length || user()!.notifications!.length===0) {
+        <h2 class="text-center text-4xl mx-4 my-6">Vous n'avez aucune notification !</h2>
+    } @else {
+        <h2 class="text-center text-4xl mx-4 my-6">Notifications</h2>
+    }
+    <div class="flex flex-col-reverse my-5">
+        @for (notification of user()?.notifications; track notification.id) {
+            <div class="block bg-base100 border-b-2 border-base200 hover:shadow-2xl hover:bg-white hover:scale-101 p-2">
+                <div class="font-mono tracking-wider inline ml-5">{{ notification.createdAt | date:'short':'Europe/Paris':'fr-FR' }}</div>
+                <div class="inline ml-5 cursor-pointer" (click)="OnClickNotif(notification)">
+                @switch (notification.type) {
+                    @case ('TEAM_INVITATION') {
+                            @if(!notification.fromUser?.username) {Quelqu'un}
+                            @else { {{ notification.fromUser?.username }} }
+                            vous a invité à rejoindre son équipe
+                    }
+                    @case ('TEAM_INVITATION_DELETE') {
+                            @if(!notification.fromUser?.username) {Quelqu'un}
+                            @else { {{ notification.fromUser?.username }} }
+                            a supprimé votre invitation
+                    }
+                    @case ('INVITATION_ACCEPTED') {
+                            @if(!notification.fromUser?.username) {Quelqu'un}
+                            @else { {{ notification.fromUser?.username }} }
+                            a accepté votre invitation
+                    }
+                    @case ('INVITATION_DECLINED') {
+                            @if(!notification.fromUser?.username) {Quelqu'un}
+                            @else { {{ notification.fromUser?.username }} }
+                            a refusé votre invitation
+                    }
+                    @case ('TEAM_KICK') {
+                            @if(!notification.fromUser?.username) {Quelqu'un}
+                            @else { {{ notification.fromUser?.username }} }
+                            vous a exclu de l'équipe
+                    }
+                    @default {
+                            {{ notification.message }}
+                    }
+                }
+                </div>
+                <div #delete class="inline" (click)="deleteNotif(notification.id)"><img class="w-8 hover:scale-125 transition-all float-right cursor-pointer" src="/assets/delete.svg" alt="supprimer"></div>
+            </div>
+            }
+        </div>
+</div>

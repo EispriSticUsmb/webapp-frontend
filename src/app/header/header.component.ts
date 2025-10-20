@@ -1,8 +1,9 @@
 import { AsyncPipe } from '@angular/common';
 import { AuthService } from './../core/auth/auth.service';
-import { Component, HostListener, inject, signal } from '@angular/core';
+import { Component, computed, HostListener, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { UserType } from '../features/user/user.model';
+import { User, UserType } from '../features/user/user.model';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-header',
@@ -10,15 +11,39 @@ import { UserType } from '../features/user/user.model';
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit, OnDestroy {
   private authservice = inject(AuthService);
-  constructor() {}
 
   user$ = this.authservice.user$;
   isLoggedIn$ = this.authservice.isLoggedIn$();
+  userSub!: Subscription;
+  user = signal<User | null | undefined>(null);
+
+  AreAllNotifRead = computed(
+    () => {
+      return this.user()?.notifications?.findIndex(
+        (notif) => !notif.isRead
+      ) === -1
+    }
+  )
 
   menuOpen = signal(false);
   mobileOpen = signal(false);
+
+
+  constructor() {}
+
+  ngOnInit(): void {
+    this.userSub = this.authservice.user$.subscribe(
+      newUser => {
+        this.user.set(newUser ? { ...newUser } : null);
+      }
+    )
+  }
+
+  ngOnDestroy(): void {
+    this.userSub.unsubscribe();
+  }
 
   toggleMenu() {
     this.menuOpen.set(!this.menuOpen());

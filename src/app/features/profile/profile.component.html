@@ -1,1 +1,168 @@
-<p>profile.component works!</p>
+<div class="container mx-auto">
+    <h2 class="text-center text-4xl my-5">Profile</h2>
+    <form [formGroup]="registerForm" (submit)="submit()" class="">
+        @if(errorMessage()) {
+            <p class="my-3 p-0.5 rounded-sm px-4 text-error-content text-center bg-error">{{ errorMessage() }}</p>
+        }
+        <div class="flex flex-wrap justify-around items-center mt-10">
+            <div class="flex flex-col items-center gap-5 mt-6">
+                <div>
+                    <label 
+                        class="relative"
+                        for="firstName"
+                    >
+                        <input
+                        id="firstName"
+                        class="peer mt-0.5 w-full rounded shadow-sm outline-0 sm:text-sm border-2 p-2 capitalize"
+                        [class]=" (firstName.invalid && (firstName.dirty || firstName.touched)) ? 'border-error' : 'border-base300 focus:border-primary'"
+                        placeholder=""
+                        formControlName="firstName" />
+                        <span
+                        class="absolute inset-y-0 start-3 -translate-y-5 bg-base200 px-0.5 text-sm font-medium transition-transform peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-5"
+                        >
+                        Prénom
+                        </span>
+                    </label>
+                    @if (firstName.invalid && (firstName.dirty || firstName.touched)) {
+                    @switch (true) {
+                        @case (firstName.hasError('required')) {
+                        <span class="block text-error text-sm">Veuillez entrer votre prénom !</span>
+                        }
+                        @case (firstName.hasError('pattern')) {
+                        <span class="block text-error text-sm">Caractère(s) interdit !</span>
+                        }
+                        @case (firstName.hasError('maxlength')) {
+                        <span class="block text-error text-sm">Trop de caractères !</span>
+                        }
+                    }
+                    }
+                </div>
+
+                <div>
+                    <label
+                    class="relative"
+                    for="lastName"
+                    >
+                    <input
+                        id="lastName"
+                        class="peer mt-0.5 w-full rounded shadow-sm sm:text-sm outline-0 border-2 p-2 uppercase"
+                        [class]=" (lastName.invalid && (lastName.dirty || lastName.touched)) ? 'border-error' : 'border-base300 focus:border-primary'"
+                        placeholder=""
+                        formControlName="lastName"
+                    />
+                    <span
+                        class="absolute inset-y-0 start-3 -translate-y-5 bg-base200 px-0.5 text-sm font-medium transition-transform peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-5"
+                    >
+                        Nom
+                    </span>
+                    </label>
+                    @if (lastName.invalid && (lastName.dirty || lastName.touched)) {
+                    @switch (true) {
+                        @case (lastName.hasError('required')) {
+                        <span class="block text-error text-sm">Veuillez entrer votre nom !</span>
+                        }
+                        @case (lastName.hasError('pattern')) {
+                        <span class="block text-error text-sm">Caractère(s) interdit !</span>
+                        }
+                        @case (lastName.hasError('maxlength')) {
+                        <span class="block text-error text-sm">Trop de caractères !</span>
+                        }
+                    }
+                    }
+                </div>
+
+                <div>
+                    <label class="relative" for="username">
+                    <input
+                        id="username"
+                        class="peer mt-0.5 w-full rounded shadow-sm sm:text-sm outline-0 border-2 p-2 lowercase"
+                        [class]=" (username.invalid && (username.dirty || username.touched)) ? 'border-error' : 'border-base300 focus:border-primary'"
+                        placeholder="" 
+                        formControlName="username" />
+                    <span
+                        class="absolute inset-y-0 start-3 -translate-y-5 bg-base200 px-0.5 text-sm font-medium transition-transform peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-5"
+                    >
+                        Pseudo
+                    </span>
+                    </label>
+                    @if (username.invalid && (username.dirty || username.touched)) {
+                    @switch (true) {
+                        @case (username.hasError('required')) {
+                        <span class="block text-error text-sm">Veuillez entrer votre pseudo !</span>
+                        }
+                        @case (username.hasError('minlength')) {
+                        <span class="block text-error text-sm">Au moins 3 caractères !</span>
+                        }
+                        @case (username.hasError('maxlength')) {
+                        <span class="block text-error text-sm">Trop de caractères !</span>
+                        }
+                        @case (username.hasError('pattern')) {
+                        <span class="block text-error text-sm">
+                            Caractère(s) interdit !
+                        </span>
+                        }
+                    }
+                    }
+                </div>
+
+                <div>
+                    <label 
+                    class="relative"
+                    for="Email"
+                    >
+                    <input
+                        id="Email"
+                        type="email"
+                        class="peer mt-0.5 w-full rounded shadow-sm sm:text-sm border-2 outline-0 p-2 lowercase"
+                        [class]=" (email.invalid && (email.dirty || email.touched)) ? 'border-error' : 'border-base300 focus:border-primary'"
+                        placeholder=""
+                        formControlName="email"
+                    />
+                    <span
+                        class="absolute inset-y-0 start-3 -translate-y-5 bg-base200 px-0.5 text-sm font-medium transition-transform peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-5"
+                    >
+                        Email
+                    </span>
+                    </label>
+                    @if (email.invalid && (email.dirty || email.touched)) {
+                    @switch (true) {
+                        @case (email.hasError('required')) {
+                        <span class="block text-red-600 text-sm">Veuillez entrer un e-mail !</span>
+                        }
+                        @case (email.hasError('email')) {
+                        <span class="block text-red-600 text-sm">Veuillez entrer un e-mail valide !</span>
+                        }
+                        @case (email.hasError('maxlength')) {
+                        <span class="block text-red-600 text-sm">Trop de caractères !</span>
+                        }
+                    }
+                    }
+                </div>
+
+                <div class="my-3">
+                <label class="p-1.5 border border-secondary rounded-l-xl pl-2 cursor-pointer has-checked:bg-base300 has-checked:border-primary">
+                    <input type="radio" formControlName="UserType" value="ETUDIANT" class="sr-only" /> Étudiant
+                </label>
+                <label class="p-1.5 border border-secondary cursor-pointer has-checked:bg-base300 has-checked:border-primary">
+                    <input type="radio" formControlName="UserType" value="ENSEIGNANT" class="sr-only"/> Enseignant
+                </label>
+                <label class="p-1.5 border border-secondary cursor-pointer has-checked:bg-base300 has-checked:border-primary">
+                    <input type="radio" formControlName="UserType" value="ANCIEN" class="sr-only"/> Ancien
+                </label>
+                <label class="p-1.5 border border-secondary rounded-r-xl pr-2 cursor-pointer has-checked:bg-base300 has-checked:border-primary">
+                    <input type="radio" formControlName="UserType" value="AUTRE" class="sr-only"/> Autre
+                </label> 
+                </div>
+                @if(AreUserInfoUpdating()) {
+                    <spinner w="10vh"></spinner>
+                } @else {
+                    <button class="btn-primary" type="submit" [disabled]="registerForm.pristine">Enregistrer</button>
+                }
+            </div>
+            <div class="mt-10">
+                <input #PPInput formControlName="profilePicture" type="file" hidden accept="image/*" (change)="newPP($event)">
+                <img #ProfilePicture alt="" class="rounded-full border-primary border-4 h-[20vh] md:w-[20vw] md:h-auto cursor-pointer m-6" (click)="PPInput.click()">
+            </div>
+        </div>
+    </form>
+</div>
