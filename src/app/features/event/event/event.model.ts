@@ -1,23 +1,47 @@
+import { Team, TeamInvitation } from "../../team/team.modele";
+import { User } from "../../user/user.model";
+
 export interface Event {
-    currentParticipants: number;
-    id: string;
-    title: string;
-    descriptionSummary: string | null;
-    description: string;
-    location: string | null;
-    startDate: Date | null;
-    endDate: Date | null;
-    registrationStart: Date | null;
-    registrationEnd: Date | null;
-    maxParticipants: number | null;
-    allowTeams: boolean;
-    maxTeamSize: number | null;
-    externalLink: string | null;
-    teams: {
-        id: string;
-        createdAt: Date;
-        name: string;
-        eventId: string;
-        leaderId: string;
-    }[];
+  currentParticipants: number | undefined;
+  id: string;
+
+  title: string;
+  descriptionSummary?: string;
+  description: string;
+  location?: string;
+
+  startDate?: Date;
+  endDate?: Date;
+
+  registrationStart?: Date;
+  registrationEnd?: Date;
+
+  maxParticipants?: number;
+
+  allowTeams: boolean;
+  maxTeamSize?: number;
+
+  externalLink?: string;
+
+  createdAt: Date;
+  updatedAt: Date;
+
+  teams?: Team[];
+  participants?: EventParticipant[];
+  invitations?: TeamInvitation[];
+}
+
+export interface EventParticipant {
+  id: string;
+
+  user: User;
+  userId: string;
+
+  event: Event;
+  eventId: string;
+
+  team?: Team;
+  teamId?: string;
+
+  createdAt: Date;
 }
