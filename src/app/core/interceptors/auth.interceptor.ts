@@ -63,8 +63,16 @@ function handle401Error(
       catchError(err => {
         isRefreshing = false;
         refreshTokenSubject.next(null);
-        authService.logout();
-        return throwError(() => originalError);
+        if(
+          err.status === 401
+          && err.error.message==='Access denied: invalid or expired token'
+        ) {
+          var errToReturn = originalError;
+          authService.logout();
+        } else {
+          var errToReturn = err;
+        }
+        return throwError(() => errToReturn);
       })
     );
   } else {
