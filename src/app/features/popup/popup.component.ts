@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, HostListener, Output, inject } from '@angular/core';
+import { Component, EventEmitter, HostListener, Output } from '@angular/core';
 
 @Component({
   selector: 'popup',
@@ -8,13 +8,15 @@ import { Component, ElementRef, EventEmitter, HostListener, Output, inject } fro
 })
 export class PopupComponent {
   @Output() clickOutside = new EventEmitter<void>();
-  private elementRef = inject(ElementRef);
 
-  @HostListener('document:click', ['$event'])
-  onClickOutside(event: MouseEvent) {
-    const target = event.target as HTMLElement;
-    if (target && !this.elementRef.nativeElement.contains(target)) {
+  clickPopUp(event: MouseEvent) {
+    if (event.target === event.currentTarget) {
       this.clickOutside.emit();
     }
+  }
+
+  @HostListener('document:keydown.escape')
+  handleEscape() {
+    this.clickOutside.emit();
   }
 }
