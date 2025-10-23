@@ -39,7 +39,7 @@
               <div id="avatarMenu" class="absolute right-0 mt-2 bg-base100 border border-base300 rounded-lg shadow-lg py-2">
                 <p class="px-4 py-2 text-center text-accent-content capitalize">{{ user?.username }}</p>
                 <a routerLink="/profile" class="block px-4 py-2 hover:bg-base200 cursor-pointer">Profil</a>
-                <a routerLink="/profile/notifications" class="block flex px-4 py-2 hover:bg-base200 cursor-pointer">
+                <a routerLink="/profile/notifications" class="flex px-4 py-2 hover:bg-base200 cursor-pointer">
                   Notifications
                   @if(!AreAllNotifRead()) {
                     <span class="relative flex size-3"><span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75"></span>  <span class="relative inline-flex size-3 rounded-full bg-secondary"></span></span>
@@ -97,7 +97,7 @@
         @if (isLoggedIn) {
           <p class="px-4 py-2 text-center text-accent-content capitalize">{{ user?.username }}</p>
           <a routerLink="/profile" class="block px-3 py-2 rounded-md text-base-content hover:bg-base200">Profil</a>
-          <a routerLink="/profile/notifications" class="block flex px-3 py-2 rounded-md text-base-content hover:bg-base200">
+          <a routerLink="/profile/notifications" class="flex px-3 py-2 rounded-md text-base-content hover:bg-base200">
             Notifications
             @if(!AreAllNotifRead()) {
               <span class="relative flex size-3"><span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75"></span>  <span class="relative inline-flex size-3 rounded-full bg-secondary"></span></span>
