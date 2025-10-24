@@ -11,6 +11,8 @@ import { DiscordRedirectComponent } from './features/redirect/discord.component'
 import { TeamComponent } from './features/team/team.component';
 import { authGuard } from './core/auth/authGuard';
 import { NotificationsComponent } from './features/notifications/notifications.component';
+import { PrivacyComponent } from './features/legal/pages/privacy.component/privacy.component';
+import { LegalNoticeComponent } from './features/legal/pages/legal-notice.component/legal-notice.component';
 
 export const routes: Routes = [
     {
@@ -52,6 +54,14 @@ export const routes: Routes = [
         path: 'events',
         component: ListEventsComponent,
         title: "Événements | EISPRI STIC"
+    },
+    {
+        path: 'privacy',
+        component: PrivacyComponent,
+    },
+    {
+        path: 'legalNotice',
+        component: LegalNoticeComponent,
     },
     {
         path: 'team',
