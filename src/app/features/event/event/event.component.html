@@ -40,7 +40,7 @@
 @switch (status()) {
     @case ('found') {
         <div class="container mx-auto bg-base100 shadow-xl mb-8">
-            <img [src]="imageUrl" class="w-full">
+            <img [src]="imageUrl" class="w-full" onerror="this.src='/logo.png'">
             <div class="p-6 text-center">
                 <div class="mb-3 text-left">
                     <h1 class="text-3xl font-bold">{{ event()?.title }}</h1>

@@ -1,5 +1,5 @@
 <div class="rounded-2xl w-[360px] overflow-hidden flex flex-col bg-base100 shadow-xl">
-    <img class="border-b border-primary h-48 object-cover" [src]="imageUrl">
+    <img class="border-b border-primary h-48 object-cover" [src]="imageUrl" onerror="this.src='/logo.png'" >
     <div class="flex flex-col p-2">
         <div class="flex justify-between items-center w-full">
             <div class="font-bold">{{event.title}}</div>
