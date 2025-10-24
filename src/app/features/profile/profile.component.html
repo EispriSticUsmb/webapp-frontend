@@ -156,7 +156,7 @@
                 @if(AreUserInfoUpdating()) {
                     <spinner w="10vh"></spinner>
                 } @else {
-                    <button class="btn-primary" type="submit" [disabled]="registerForm.pristine">Enregistrer</button>
+                    <button class="btn-primary cursor-pointer disabled:cursor-not-allowed" type="submit" [disabled]="registerForm.pristine">Enregistrer</button>
                 }
             </div>
             <div class="mt-10">
