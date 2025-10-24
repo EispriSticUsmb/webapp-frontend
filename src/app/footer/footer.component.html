@@ -1,1 +1,31 @@
-<p>footer.component works!</p>
+<div class="bg-accent mt-8">
+    <div class="container p-2 md:max-w-[40rem] xl:max-w-[48rem] 2xl:max-w-[64rem] mx-auto flex justify-between items-center flex-wrap gap-3">
+        <div class="flex-1 text-center">
+            <img src="/logo.png" class="min-w-[10vh] w-[8vw]">
+        </div>
+        <div class="flex-1 text-center">
+            <p class="text-xl font-bold m-4">Informations légales</p>
+            <a routerLink="/legalNotice" class="block underline cursor-pointer">Mentions légales</a>
+            <a routerLink="/privacy" class="block underline cursor-pointer">Confidentialité</a>
+        </div>
+        <div class="flex-1 text-center">
+            <a routerLink="/contact" class="block text-xl font-bold cursor-pointer m-4">Contact</a>
+            <div class="flex flex-wrap justify-center gap-5">
+                <a class="cursor-pointer" href="https://discord.gg/7hbnwsZuSv" target="_blank">
+                    <img class="h-[4vh] mx-auto my-1" 
+                        (mouseenter)="DiscordLogo = '/assets/logo_discord_hover.png'" 
+                        (mouseleave)="DiscordLogo = '/assets/logo_discord.png'"
+                        [src]="DiscordLogo" alt="Logo de discord">
+                </a>
+                <a class="cursor-pointer" href="https://www.instagram.com/eispri.stic" target="_blank">
+                    <img 
+                    class="h-[4vh] mx-auto my-1" 
+                    (mouseenter)="InstaLogo = '/assets/logo_instagram_hover.png'" 
+                    (mouseleave)="InstaLogo = '/assets/logo_instagram.png'"
+                    [src]="InstaLogo" alt="">
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="text-center p-2">{{ year }} &copy;</div>
+</div>
