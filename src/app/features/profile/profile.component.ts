@@ -59,6 +59,23 @@ export class ProfileComponent implements OnInit, OnDestroy, AfterViewInit{
     );
   }
 
+  deleteUser(password: string) {
+    this.userService.deleteUser(this.user!.id, password).subscribe({
+        next: () => {
+        this.errorMessage.set(null);
+        this.auth.logout();
+      },
+
+      error: (err : HttpErrorResponse) => {
+        if(err.status){
+          this.errorMessage.set(err.error?.message || 'Oups ! Impossible de se connecter pour le moment')
+        } else {
+          this.errorMessage.set("Oups ! Impossible de se connecter pour le moment")
+        }
+      }
+    })
+  }
+
   newPP (event: Event) {
     const input = event.target as HTMLInputElement;
 

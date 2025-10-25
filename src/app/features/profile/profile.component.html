@@ -165,4 +165,22 @@
             </div>
         </div>
     </form>
+    <div class="text-center mt-8">
+        <h3 class="text-2xl">Supprimez mon compte</h3>
+        <label class="relative" for="DeletePassword">
+            <input
+                #DeletePassword
+                type="password"
+                id="DeletePassword"
+                class="peer mt-0.5 rounded shadow-sm sm:text-sm outline-0 border-2 p-2 lowercase border-base300 focus:border-primary"
+                placeholder="" 
+                formControlName="username" />
+            <span
+                class="absolute inset-y-0 start-3 -translate-y-5 bg-base200 px-0.5 text-sm font-medium transition-transform peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-5"
+            >
+                Mot de passe
+            </span>
+        </label>
+        <button class="btn-primary m-6 bg-error text-error-content hover:bg-error/70 cursor-pointer" (click)="deleteUser(DeletePassword.value)">Valider</button>
+    </div>
 </div>

@@ -106,4 +106,8 @@ export class UserService {
 
     return this.http.put<void>(`users/${userId}/profileImage`, formData);
   }
+
+  deleteUser(userId:string, password?: string) {
+    return this.http.delete(`users/${userId}`, { body: { password }})
+  }
 }
