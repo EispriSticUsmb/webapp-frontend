@@ -8,7 +8,7 @@ import { UserService } from '../../core/user/user.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { SpinnerComponent } from "../spinner/spinner.component";
 import { environment } from '../../../environments/environment';
-import { isPlatformBrowser } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-profile.component',
@@ -21,6 +21,7 @@ export class ProfileComponent implements OnInit, OnDestroy, AfterViewInit{
   private auth = inject(AuthService);
   private userService = inject(UserService);
   private platformId = inject(PLATFORM_ID);
+  private router = inject(Router);
   errorMessage = signal<String | null>(null);
   userSub!: Subscription;
   user: User | undefined | null;
@@ -51,6 +52,8 @@ export class ProfileComponent implements OnInit, OnDestroy, AfterViewInit{
           if(this.viewInit && this.profilePicture.pristine && user.profileImage) {
             this.profilePictureDOM.nativeElement.src = user.profileImage
           }
+        } else {
+          this.router.navigate(['/']);
         }
       }
     );
