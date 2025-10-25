@@ -131,6 +131,7 @@ export class EventComponent implements OnInit,OnDestroy{
             this.errorMessage.set("Oups ! Impossible de se connecter pour le moment")
           }
           this.createTeamButtonInProgress.set(false);
+          this.popup.set(false);
         }
       }
     );
