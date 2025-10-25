@@ -42,3 +42,26 @@
         @apply px-4 py-2 rounded-2xl border-2 text-base-content border-neutral transition-colors duration-200 hover:bg-neutral hover:text-neutral-content disabled:cursor-not-allowed;
     }
 }
+
+@font-face {
+  font-family: 'Nunito';
+  src: url('/fonts/Nunito/Nunito-VariableFont_wght.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Nunito';
+  src: url('/fonts/Nunito-Italic-VariableFont_wght.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: italic;
+  font-display: swap;
+}
+
+
+@layer base {
+  body {
+    font-family: 'Nunito', sans-serif;
+  }
+}
