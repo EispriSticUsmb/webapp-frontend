@@ -168,7 +168,7 @@ export class TeamComponent implements OnInit, OnDestroy {
         }
         this.event!.teams = this.event?.teams?.filter(t => t.id!==this.teamId);
         this.eventService.updateEventList(this.event!.id, this.event!);
-        this.router.navigate(['/']);
+        this.router.navigate(['/event',this.event!.id]);
         },
       error: (err : HttpErrorResponse) => { 
         if(err.status){
@@ -283,6 +283,23 @@ export class TeamComponent implements OnInit, OnDestroy {
             this.errorMessage.set("Oups ! Impossible de se connecter pour le moment")
           }
           this.resInv.set(false);
+        }
+    })
+  }
+
+  leaveTeam() {
+    const eventId: string = this.team()!.eventId;
+    const userId: string = this.user()!.id;
+    this.eventService.leaveEvent(eventId, userId).subscribe({
+      next: () => {
+        this.router.navigate(['/event',eventId]);
+      },
+      error: (err : HttpErrorResponse) => {
+          if(err.status){
+            this.errorMessage.set(err.error?.message || 'Oups ! Impossible de se connecter pour le moment')
+          } else {
+            this.errorMessage.set("Oups ! Impossible de se connecter pour le moment")
+          }
         }
     })
   }

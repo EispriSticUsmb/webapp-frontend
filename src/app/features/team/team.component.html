@@ -88,7 +88,7 @@
                                 @if(team()?.leaderId===member.id) {
                                     <img class="w-8 animate-bounce" src="/assets/couronne.svg" alt="est le chef d'équipe">
                                 }@else {
-                                        <img [class]="isTeamMember() ? '' : 'invisible'" class="w-8 hover:scale-125 transition-all cursor-pointer" src="/assets/delete.svg" alt="supprimer" (click)="deleteTeamMember(member.id)">
+                                        <img [class]="user() && team()?.leaderId==user()?.id ? '' : 'invisible'" class="w-8 hover:scale-125 transition-all cursor-pointer" src="/assets/delete.svg" alt="supprimer" (click)="deleteTeamMember(member.id)">
                                 }
                             </div>
                         </div>
@@ -100,6 +100,10 @@
             <button (click)="openPopup()" class="btn-secondary block mx-auto my-5 cursor-pointer">Changer le nom d'équipe</button>
             <button (click)="deleteTeam()" class="btn-primary hover:bg-error hover:text-error-content hover:border-error block mx-auto my-5 cursor-pointer">Supprimer l'équipe</button>
         </div>
+    } @else {
+        @if(isTeamMember()) {
+            <button (click)="leaveTeam()" class="btn-primary hover:bg-error hover:text-error-content hover:border-error block mx-auto my-5 cursor-pointer">Quitter l'équipe</button>
+        }
     }
         }
     @else {
