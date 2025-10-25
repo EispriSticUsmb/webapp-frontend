@@ -207,31 +207,38 @@ export class TeamComponent implements OnInit, OnDestroy {
   }
 
   invitClick(identifier: string) {
-    this.teamService.inviteTeamMember(this.teamId, identifier.trim()).subscribe({
-      next: (newInvitation) => {
-        this.errorMessage.set(null);
-        this.team.update(team => {
-          if (!team) return team;
-
-          return {
-            ...team,
-            invitations: [...(team.invitations ?? []), newInvitation],
-          };
-        });
-        this.userService.getUser(newInvitation.invitedId).subscribe(
-          user => { 
-            this.inviteds.update(users => [...users, user]);
-           }
-        )
-      },
-      error: (err : HttpErrorResponse) => {
-        if(err.status){
-          this.errorMessage.set(err.error?.message || 'Oups ! Impossible de se connecter pour le moment')
-        } else {
-          this.errorMessage.set("Oups ! Impossible de se connecter pour le moment")
-        }
-      },
-    })
+    if(!identifier || !this.user()) {
+      if(!this.user())
+        this.errorMessage.set("Connexion requise !");
+      else
+        this.errorMessage.set("Identifiant requis !");
+    } else {
+      this.teamService.inviteTeamMember(this.teamId, identifier.trim()).subscribe({
+        next: (newInvitation) => {
+          this.errorMessage.set(null);
+          this.team.update(team => {
+            if (!team) return team;
+  
+            return {
+              ...team,
+              invitations: [...(team.invitations ?? []), newInvitation],
+            };
+          });
+          this.userService.getUser(newInvitation.invitedId).subscribe(
+            user => { 
+              this.inviteds.update(users => [...users, user]);
+             }
+          )
+        },
+        error: (err : HttpErrorResponse) => {
+          if(err.status){
+            this.errorMessage.set(err.error?.message || 'Oups ! Impossible de se connecter pour le moment')
+          } else {
+            this.errorMessage.set("Oups ! Impossible de se connecter pour le moment")
+          }
+        },
+      })
+    }
   }
 
   acceptInv() {
