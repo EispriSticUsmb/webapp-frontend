@@ -69,7 +69,6 @@ export class EventComponent implements OnInit,OnDestroy{
     this.imageUrl = environment.apiUrl+'/events/'+this.eventId+'/eventImage';
     this.sub = this.eventService.findEventById(this.eventId).subscribe(res => {
       this.event.set(res.event);
-      if(this.event() )this.event.update(e => ({ ...e, externalLink: 'https://google.com' }) as Event);
       this.status.set(res.status);
       this.textButton.set(this.buttonEventText(res.event as Event))
       this.isDisabled.set(this.ButtonDisableState());

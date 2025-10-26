@@ -56,7 +56,7 @@
                 </div>
                 @if(event()?.location) { <div class="text-right my-3"><img class="inline w-6" src="/assets/location-pin.svg"> {{ event()?.location }}</div> }
                 <p></p>
-                <p class="text-left">{{ event()?.description }}</p>
+                <div class="whitespace-pre-wrap text-left">{{ event()?.description }}</div>
                 @if(mainButtonIsLoading()) {
                     <spinner w="5vh"></spinner>
                 } @else {
