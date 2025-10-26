@@ -60,6 +60,7 @@ export interface User {
   sentInvitations?: TeamInvitation[];
 
   site?: Site;
+  points: number;
 }
 
 export interface Notification {
