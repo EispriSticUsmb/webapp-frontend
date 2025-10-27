@@ -1,0 +1,27 @@
+<urlset xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+    <url>
+        <loc>https://eispri-stic.fr/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <priority>1.00</priority>
+    </url>
+    <url>
+        <loc>https://eispri-stic.fr/events</loc>
+        <lastmod>2025-10-27</lastmod>
+        <priority>0.80</priority>
+    </url>
+    <url>
+        <loc>https://eispri-stic.fr/contact</loc>
+        <lastmod>2025-10-27</lastmod>
+        <priority>0.50</priority>
+    </url>
+    <url>
+        <loc>https://eispri-stic.fr/legalNotice</loc>
+        <lastmod>2025-10-27</lastmod>
+        <priority>0.20</priority>
+    </url>
+    <url>
+        <loc>https://eispri-stic.fr/privacy</loc>
+        <lastmod>2025-10-27</lastmod>
+        <priority>0.20</priority>
+    </url>
+</urlset>
