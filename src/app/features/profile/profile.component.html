@@ -156,7 +156,7 @@
                 @if(AreUserInfoUpdating()) {
                     <spinner w="10vh"></spinner>
                 } @else {
-                    <button class="btn-primary cursor-pointer disabled:cursor-not-allowed" type="submit" [disabled]="registerForm.pristine">Enregistrer</button>
+                    <button class="btn-primary cursor-pointer disabled:cursor-not-allowed" type="submit" [disabled]="registerForm.pristine || registerForm.invalid">Enregistrer</button>
                 }
             </div>
             <div class="mt-10">
@@ -165,7 +165,114 @@
             </div>
         </div>
     </form>
-    <div class="text-center mt-8">
+    <div>
+        <h3 class="text-center text-2xl my-5">Changer son mot de passe</h3>
+        @if(PassworderrorMessage()) {
+            <div class="text-center">
+                <p class="my-3 p-0.5 rounded-sm px-4 text-error-content inline bg-error">{{ PassworderrorMessage() }}</p>
+            </div>
+        }
+        <form [formGroup]="newPasswordForm" (submit)="changePasswordSubmit()">
+            <div class="text-center">
+                <div class="my-4">
+                    <label 
+                        class="relative"
+                        for="oldPassword"
+                    >
+                        <input
+                        id="oldPassword"
+                        type="password"
+                        class="peer mt-0.5 rounded shadow-sm outline-0 sm:text-sm border-2 p-2 capitalize"
+                        [class]=" (oldPassword.invalid && (oldPassword.dirty || oldPassword.touched)) ? 'border-error' : 'border-base300 focus:border-primary'"
+                        placeholder=""
+                        formControlName="oldPassword" />
+                        <span
+                        class="absolute inset-y-0 start-3 -translate-y-5 bg-base200 px-0.5 text-sm font-medium transition-transform peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-5"
+                        >
+                        Ancien mot de passe 
+                        </span>
+                    </label>
+                    @if (oldPassword.invalid && (oldPassword.dirty || oldPassword.touched)) {
+                        @switch (true) {
+                            @case (oldPassword.hasError('required')) {
+                            <span class="block text-error text-sm">Veuillez entrer votre ancien mot de passe !</span>
+                            }
+                        }
+                    }
+                </div>
+                <div class="my-4">
+                    <label 
+                        class="relative"
+                        for="newPassword"
+                    >
+                        <input
+                        id="newPassword"
+                        type="password"
+                        class="peer mt-0.5 rounded shadow-sm outline-0 sm:text-sm border-2 p-2 capitalize"
+                        [class]=" (newPassword.invalid && (newPassword.dirty || newPassword.touched)) ? 'border-error' : 'border-base300 focus:border-primary'"
+                        placeholder=""
+                        formControlName="newPassword" />
+                        <span
+                        class="absolute inset-y-0 start-3 -translate-y-5 bg-base200 px-0.5 text-sm font-medium transition-transform peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-5"
+                        >
+                        Nouveau mot de passe 
+                        </span>
+                    </label>
+                    @if (newPassword.invalid && (newPassword.dirty || newPassword.touched)) {
+                        @switch (true) {
+                            @case (newPassword.hasError('required')) {
+                            <span class="block text-error text-sm">Veuillez entrer votre nouveau mot de passe !</span>
+                            }
+                            @case (newPassword.hasError('minlength')) {
+                            <span class="block text-red-600 text-sm">Au moins 8 caractères !</span>
+                            }
+                            @case (newPassword.hasError('maxlength')) {
+                            <span class="block text-red-600 text-sm">Trop de caractères !</span>
+                            }
+                        }
+                    }
+                </div>
+                <div class="my-4">
+                    <label 
+                        class="relative"
+                        for="confimPassword"
+                    >
+                        <input
+                        id="confimPassword"
+                        type="password"
+                        class="peer mt-0.5 rounded shadow-sm outline-0 sm:text-sm border-2 p-2 capitalize"
+                        [class]=" ((confimPassword.invalid || confimPassword.value!==newPassword.value) && (confimPassword.dirty || confimPassword.touched)) ? 'border-error' : 'border-base300 focus:border-primary'"
+                        placeholder=""
+                        formControlName="confimPassword" />
+                        <span
+                        class="absolute inset-y-0 start-3 -translate-y-5 bg-base200 px-0.5 text-sm font-medium transition-transform peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-5"
+                        >
+                        Confirmer le mot de passe
+                        </span>
+                    </label>
+                    @if ((confimPassword.invalid || confimPassword.value!==newPassword.value) && (confimPassword.dirty || confimPassword.touched)) {
+                        @switch (true) {
+                            @case (confimPassword.hasError('required')) {
+                            <span class="block text-error text-sm">Veuillez confirmer votre nouveau mot de passe</span>
+                            }
+                            @default {
+                                <span class="block text-error text-sm">Les mots de passe ne correspondent pas</span>
+                            }
+                        }
+                    }
+                </div>
+            </div>
+            <div class="text-center m-6">
+                @if(ChangePasswordLoading()) {
+                    <spinner w="5vh"></spinner>
+                }
+                @else {
+                    <button class="btn-primary cursor-pointer disabled:cursor-not-allowed" type="submit" [disabled]="newPasswordForm.invalid">Valider</button>
+                }
+            </div>
+        </form>
+    </div>
+    <div class="text-center mt-10">
         @if(showDeleteForm) {
             <h3 class="text-2xl">Supprimez mon compte</h3>
             <label class="relative" for="DeletePassword">
@@ -185,7 +292,7 @@
             <button class="btn-primary m-6 bg-error text-error-content hover:bg-error/70 cursor-pointer" (click)="deleteUser(DeletePassword.value)">Valider</button>
         }
         @else {
-            <button class="btn-primary cursor-pointer" (click)="showDeleteForm = true">Supprimez mon compte</button>
+            <button class="btn-primary cursor-pointer bg-error text-error-content hover:bg-error/70" (click)="showDeleteForm = true">Supprimez mon compte</button>
         }
     </div>
 </div>

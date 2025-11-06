@@ -110,4 +110,8 @@ export class UserService {
   deleteUser(userId:string, password?: string) {
     return this.http.delete(`users/${userId}`, { body: { password }})
   }
+
+  changeUserPassword(userId:string, newPassword: string, oldPassword?: string) {
+    return this.http.put(`users/${userId}/password`, { newPassword, oldPassword })
+  }
 }

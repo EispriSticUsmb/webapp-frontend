@@ -23,6 +23,8 @@ export class ProfileComponent implements OnInit, OnDestroy, AfterViewInit{
   private platformId = inject(PLATFORM_ID);
   private router = inject(Router);
   errorMessage = signal<String | null>(null);
+  PassworderrorMessage = signal<String | null>(null);
+  ChangePasswordLoading = signal<boolean>(false);
   userSub!: Subscription;
   user: User | undefined | null;
   viewInit: boolean = false;
@@ -31,6 +33,9 @@ export class ProfileComponent implements OnInit, OnDestroy, AfterViewInit{
   @ViewChild('ProfilePicture') profilePictureDOM!: ElementRef<HTMLImageElement>;
 
   ngOnInit(): void {
+    this.errorMessage.set(null);
+    this.PassworderrorMessage.set(null);
+    this.ChangePasswordLoading.set(false);
     this.showDeleteForm = false;
     this.userSub = this.auth.user$.subscribe(
       user => {
@@ -59,6 +64,25 @@ export class ProfileComponent implements OnInit, OnDestroy, AfterViewInit{
         }
       }
     );
+  }
+
+  changePasswordSubmit(): void {
+    this.ChangePasswordLoading.set(true);
+    this.userService.changeUserPassword(this.user!.id, this.newPassword.value!, this.oldPassword.value!).subscribe({
+        next: () => {
+        this.ChangePasswordLoading.set(false);
+        this.PassworderrorMessage.set(null);
+      },
+
+      error: (err : HttpErrorResponse) => {
+        this.ChangePasswordLoading.set(false);
+        if(err.status){
+          this.PassworderrorMessage.set(err.error?.message || 'Oups ! Impossible de se connecter pour le moment')
+        } else {
+          this.PassworderrorMessage.set("Oups ! Impossible de se connecter pour le moment")
+        }
+      }
+    })
   }
 
   deleteUser(password: string) {
@@ -170,9 +194,8 @@ export class ProfileComponent implements OnInit, OnDestroy, AfterViewInit{
     firstName: ['', [Validators.required, Validators.pattern(/^[A-Za-zÀ-ÖØ-öø-ÿ'-]+$/), Validators.maxLength(80)]],
     lastName: ['', [Validators.required, Validators.pattern(/^[A-Za-zÀ-ÖØ-öø-ÿ'-]+$/), Validators.maxLength(100)]],
     UserType: ['ETUDIANT', [Validators.required]],
-    profilePicture: [null,  [Validators.required]],
+    profilePicture: [null,  []],
   })
-
   get email() {
     return this.registerForm.get('email')!;
   }
@@ -195,5 +218,23 @@ export class ProfileComponent implements OnInit, OnDestroy, AfterViewInit{
 
   get profilePicture() {
     return this.registerForm.get('profilePicture')!;
+  }
+
+  newPasswordForm = this.formBuilder.group({
+    oldPassword: ['', [Validators.required]],
+    newPassword: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(32)]],
+    confimPassword: ['', [Validators.required]],
+  })
+
+  get oldPassword() {
+    return this.newPasswordForm.get('oldPassword')!;
+  }
+
+  get newPassword() {
+    return this.newPasswordForm.get('newPassword')!;
+  }
+
+  get confimPassword() {
+    return this.newPasswordForm.get('confimPassword')!;
   }
 }
