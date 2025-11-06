@@ -78,7 +78,6 @@ export class EventComponent implements OnInit,OnDestroy{
   ButtonDisableState(): boolean {
     if(!this.eventService.AreInscriptionAllowed(this.event()!))
       return true;
-    if(!this.userId()) return true;
     return false;
   }
 
@@ -137,6 +136,10 @@ export class EventComponent implements OnInit,OnDestroy{
   }
 
   buttonEvent(): void {
+    if(!this.userId()) {
+      this.router.navigate(['/login']);
+      return;
+    }
     const event = this.event();
     if(event) {
       if(this.eventService.isUserInEvent(event.id)) {
