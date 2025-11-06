@@ -26,10 +26,12 @@ export class ProfileComponent implements OnInit, OnDestroy, AfterViewInit{
   userSub!: Subscription;
   user: User | undefined | null;
   viewInit: boolean = false;
+  showDeleteForm: boolean = false;
 
   @ViewChild('ProfilePicture') profilePictureDOM!: ElementRef<HTMLImageElement>;
 
   ngOnInit(): void {
+    this.showDeleteForm = false;
     this.userSub = this.auth.user$.subscribe(
       user => {
         this.user = user;
