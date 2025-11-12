@@ -49,6 +49,7 @@ export const routes: Routes = [
             { path: '', redirectTo: '/events', pathMatch: 'full'},
             { path: ':id', component: EventComponent }
         ],
+        title: "Événement | EISPRI STIC"
     },
     {
         path: 'events',
@@ -58,10 +59,12 @@ export const routes: Routes = [
     {
         path: 'privacy',
         component: PrivacyComponent,
+        title: "EISPRI STIC",
     },
     {
         path: 'legalNotice',
         component: LegalNoticeComponent,
+        title: "EISPRI STIC",
     },
     {
         path: 'team',
@@ -70,14 +73,17 @@ export const routes: Routes = [
                 path: ':id', component: TeamComponent,
             }
         ],
+        title: "EISPRI STIC"
     },
     {
         path: 'boutique',
         component: ShopRedirectComponent,
+        title: "EISPRI STIC"
     },
     {
         path: 'discord',
         component: DiscordRedirectComponent,
+        title: "EISPRI STIC"
     },
     {
         path: '**',
