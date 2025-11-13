@@ -5,6 +5,7 @@ import { HeaderComponent } from './header/header.component';
 import { AuthService } from './core/auth/auth.service';
 import { registerLocaleData } from '@angular/common';
 import { FooterComponent } from "./footer/footer.component";
+import { WebsocketService } from './core/websocket/websocket.service';
 registerLocaleData(localeFr, 'fr');
 @Component({
   selector: 'app-root',
@@ -15,7 +16,8 @@ registerLocaleData(localeFr, 'fr');
 })
 
 export class App {
-  authService = inject(AuthService)
+  authService = inject(AuthService);
+  websocketService = inject(WebsocketService);
 
   constructor() {
     this.authService.loadUser();
