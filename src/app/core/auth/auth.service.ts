@@ -32,6 +32,11 @@ export class AuthService {
   }
 
   logout(): void {
+    const user = this._user$.value;
+    if(user && this.socketsub) {
+      this.socket.emitUnsubscribeWsEvent("users/" + user.id);
+      this.socketsub.unsubscribe();
+    }
     this.http.post('/auth/logout', null, { withCredentials : true }).subscribe()
     this.accessToken$.next(null);
     this._user$.next(null);
@@ -121,6 +126,19 @@ export class AuthService {
       tap( ({authtokens, user }) => {
         this._user$.next(user);
         this.accessToken$.next(authtokens);
+        if (isPlatformBrowser(this.platformId)) {
+          let envApiUrl = environment.apiUrl;
+          if(envApiUrl.endsWith('/')){
+            envApiUrl = envApiUrl.substring(0, envApiUrl.length - 1);
+          }
+          user.profileImage = envApiUrl + '/users/' + user.id + '/profileImage';
+        } else {
+            let envApiUrl = process.env['API_URL_SSR'] || environment.apiUrl;
+            if(envApiUrl.endsWith('/')){
+              envApiUrl = envApiUrl.substring(0, envApiUrl.length - 1);
+            }
+            user.profileImage = envApiUrl + '/users/' + user.id + '/profileImage';
+        }
       }),
       map(() => void 0),
     );
@@ -135,8 +153,21 @@ export class AuthService {
         return {authtokens, user };
       }),
       tap( ({authtokens, user }) => {
-        this._user$.next(user);
-        this.accessToken$.next(authtokens);
+      this._user$.next(user);
+      this.accessToken$.next(authtokens);
+        if (isPlatformBrowser(this.platformId)) {
+          let envApiUrl = environment.apiUrl;
+          if(envApiUrl.endsWith('/')){
+            envApiUrl = envApiUrl.substring(0, envApiUrl.length - 1);
+          }
+          user.profileImage = envApiUrl + '/users/' + user.id + '/profileImage';
+        } else {
+            let envApiUrl = process.env['API_URL_SSR'] || environment.apiUrl;
+            if(envApiUrl.endsWith('/')){
+              envApiUrl = envApiUrl.substring(0, envApiUrl.length - 1);
+            }
+            user.profileImage = envApiUrl + '/users/' + user.id + '/profileImage';
+        }
       }),
       map(() => void 0),
     );
