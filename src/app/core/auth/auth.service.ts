@@ -1,11 +1,12 @@
 import { inject, Injectable, PLATFORM_ID } from '@angular/core';
-import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, of, Subscription, throwError } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, filter, map, tap } from 'rxjs/operators';
 import { Notification, User, UserType } from '../../features/user/user.model';
 import { Router } from '@angular/router';
 import { isPlatformBrowser } from '@angular/common';
 import { environment } from '../../../environments/environment';
+import { WebsocketService } from '../websocket/websocket.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -14,6 +15,9 @@ export class AuthService {
   private router = inject(Router);
   private http = inject(HttpClient);
   private platformId = inject(PLATFORM_ID);
+
+  private socket = inject(WebsocketService);
+  private socketsub?: Subscription;
   
   get user$(): Observable<User | null | undefined> {
     return this._user$.asObservable();
@@ -76,6 +80,13 @@ export class AuthService {
       }),
       tap(user => {
         this._user$.next(user);
+        if(isPlatformBrowser(this.platformId) && user && !this.socketsub) {
+          const userId = user.id;
+          this.socket.emitSubscribeWsEvent("users/" + userId);
+          this.socketsub = this.socket.subscribeWsEvent<void>("users/" + userId).subscribe(
+            () => this.loadUser()
+          )
+        }
       }),
       catchError((err) => {
         this._user$.next(null);

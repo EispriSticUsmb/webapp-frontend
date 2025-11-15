@@ -1,4 +1,4 @@
-import { Component, computed, inject, OnDestroy, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnDestroy, OnInit, PLATFORM_ID, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NotFoundComponent } from "../not-found/not-found.component";
 import { SpinnerComponent } from "../spinner/spinner.component";
@@ -13,6 +13,8 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { HttpErrorResponse } from '@angular/common/http';
 import { EventService } from '../../core/event/event.service';
 import { Event } from '../event/event/event.model';
+import { WebsocketService } from '../../core/websocket/websocket.service';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-team',
@@ -27,6 +29,8 @@ export class TeamComponent implements OnInit, OnDestroy {
   private eventService = inject(EventService);
   private auth = inject(AuthService);
   private router = inject(Router);
+  private socket = inject(WebsocketService);
+  private platformId = inject(PLATFORM_ID);
 
   teamId!: string;
   team = signal<Team | undefined>(undefined);
@@ -47,6 +51,8 @@ export class TeamComponent implements OnInit, OnDestroy {
   isTeamMember = computed(() => {
     return this.members().findIndex( member => member.id===this.user()?.id) !== -1
   } )
+
+  wsTeamSub!: Subscription;
 
   form = new FormGroup({
     name: new FormControl('', [Validators.required, Validators.maxLength(64)])
@@ -76,6 +82,23 @@ export class TeamComponent implements OnInit, OnDestroy {
         this.status.set('not-found');
       }
     } );
+    if(isPlatformBrowser(this.platformId)) {
+      this.wsTeamSub = this.socket.subscribeWsEvent<Team | null>("teams/"+this.teamId).subscribe(
+        ( team ) => {
+          if(team) {
+            this.members.set([]);
+            this.getMembers(team);
+            this.inviteds.set([]);
+            this.getInvitations(team);
+            this.team.set(team);
+          }
+          else {
+            this.router.navigate(['/']);
+          }
+        }
+      );
+      this.socket.emitSubscribeWsEvent("teams/"+this.teamId);
+    }
   }
 
   getMembers(team: Team): void {
@@ -105,6 +128,10 @@ export class TeamComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.userSub.unsubscribe();
     this.eventSub?.unsubscribe();
+    if(isPlatformBrowser(this.platformId)) {
+      this.socket.emitUnsubscribeWsEvent("teams/"+this.teamId);
+      this.wsTeamSub.unsubscribe();
+    }
   }
 
   SwitchTab(tab: 'membres' | 'invitations') {
@@ -120,7 +147,7 @@ export class TeamComponent implements OnInit, OnDestroy {
     this.teamService.deleteTeamMember(this.team()!.id, userId).subscribe({
       next: (team) => {
         this.team.set(team);
-        this.members.set(this.members().filter(member => member.id!==userId))
+        //this.members.set(this.members().filter(member => member.id!==userId))
         this.errorMessage.set(null);
       },
       error: (err : HttpErrorResponse) => {
@@ -143,7 +170,7 @@ export class TeamComponent implements OnInit, OnDestroy {
     if(invId) {
       this.teamService.deleteTeamInvitation(invId).subscribe({
         next: (team) => {
-          this.inviteds.set(this.inviteds().filter(member => member.id !==userId));
+          //this.inviteds.set(this.inviteds().filter(member => member.id !==userId));
           this.errorMessage.set(null);
         },
         error: (err : HttpErrorResponse) => {
@@ -226,7 +253,7 @@ export class TeamComponent implements OnInit, OnDestroy {
           });
           this.userService.getUser(newInvitation.invitedId).subscribe(
             user => { 
-              this.inviteds.update(users => [...users, user]);
+              //this.inviteds.update(users => [...users, user]);
              }
           )
         },
@@ -256,8 +283,8 @@ export class TeamComponent implements OnInit, OnDestroy {
               members: [...(team.members ?? []), NewEventParticipant],
             };
           });
-          this.members.update(users => [...users, user]);
-          this.inviteds.set(this.inviteds().filter(member => member.id !==user.id));
+          //this.members.update(users => [...users, user]);
+          //this.inviteds.set(this.inviteds().filter(member => member.id !==user.id));
         }
         this.errorMessage.set(null);
         this.resInv.set(false);
@@ -279,7 +306,7 @@ export class TeamComponent implements OnInit, OnDestroy {
     this.resInv.set(true);
     this.teamService.RespondInvByTeam(this.teamId, userId, false).subscribe({
       next: () => {
-        this.inviteds.set(this.inviteds().filter(member => member.id !==userId));
+        //this.inviteds.set(this.inviteds().filter(member => member.id !==userId));
         this.errorMessage.set(null);
         this.resInv.set(false);
       },

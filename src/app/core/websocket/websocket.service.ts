@@ -41,4 +41,16 @@ export class WebsocketService {
   onError(): Observable<Error> {
     return fromEvent(this.socket, 'error') as Observable<Error>;
   }
+
+  subscribeWsEvent<T>(WsEvent: string): Observable<T> {
+    return fromEvent(this.socket, WsEvent) as Observable<T>;
+  }
+
+  emitSubscribeWsEvent(wsEvent: string) {
+    this.socket.emit('subscribe', wsEvent);
+  }
+
+  emitUnsubscribeWsEvent(wsEvent: string) {
+    this.socket.emit('unsubscribe', wsEvent);
+  }
 }
