@@ -126,18 +126,12 @@ export class AuthService {
       tap( ({authtokens, user }) => {
         this._user$.next(user);
         this.accessToken$.next(authtokens);
-        if (isPlatformBrowser(this.platformId)) {
-          let envApiUrl = environment.apiUrl;
-          if(envApiUrl.endsWith('/')){
-            envApiUrl = envApiUrl.substring(0, envApiUrl.length - 1);
-          }
-          user.profileImage = envApiUrl + '/users/' + user.id + '/profileImage';
-        } else {
-            let envApiUrl = process.env['API_URL_SSR'] || environment.apiUrl;
-            if(envApiUrl.endsWith('/')){
-              envApiUrl = envApiUrl.substring(0, envApiUrl.length - 1);
-            }
-            user.profileImage = envApiUrl + '/users/' + user.id + '/profileImage';
+        if(isPlatformBrowser(this.platformId) && user && !this.socketsub) {
+          const userId = user.id;
+          this.socket.emitSubscribeWsEvent("users/" + userId);
+          this.socketsub = this.socket.subscribeWsEvent<void>("users/" + userId).subscribe(
+            () => this.loadUser()
+          )
         }
       }),
       map(() => void 0),
@@ -153,20 +147,14 @@ export class AuthService {
         return {authtokens, user };
       }),
       tap( ({authtokens, user }) => {
-      this._user$.next(user);
-      this.accessToken$.next(authtokens);
-        if (isPlatformBrowser(this.platformId)) {
-          let envApiUrl = environment.apiUrl;
-          if(envApiUrl.endsWith('/')){
-            envApiUrl = envApiUrl.substring(0, envApiUrl.length - 1);
-          }
-          user.profileImage = envApiUrl + '/users/' + user.id + '/profileImage';
-        } else {
-            let envApiUrl = process.env['API_URL_SSR'] || environment.apiUrl;
-            if(envApiUrl.endsWith('/')){
-              envApiUrl = envApiUrl.substring(0, envApiUrl.length - 1);
-            }
-            user.profileImage = envApiUrl + '/users/' + user.id + '/profileImage';
+        this._user$.next(user);
+        this.accessToken$.next(authtokens);
+        if(isPlatformBrowser(this.platformId) && user && !this.socketsub) {
+          const userId = user.id;
+          this.socket.emitSubscribeWsEvent("users/" + userId);
+          this.socketsub = this.socket.subscribeWsEvent<void>("users/" + userId).subscribe(
+            () => this.loadUser()
+          )
         }
       }),
       map(() => void 0),
