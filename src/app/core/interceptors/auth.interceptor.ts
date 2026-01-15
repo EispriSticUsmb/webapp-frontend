@@ -13,7 +13,7 @@ export function authInterceptor(
   next: HttpHandlerFn
 ): Observable<HttpEvent<unknown>> {
   const platformId = inject(PLATFORM_ID);
-  if (!isPlatformBrowser(platformId)) {
+  if (!isPlatformBrowser(platformId) || req.url.includes('/auth/logout')) {
     return next(req);
   }
   const authService = inject(AuthService);
