@@ -26,7 +26,7 @@ export function authInterceptorServer(
   
   const cookies = parseCookies(request?.headers.get('cookie') ?? '')
   const refreshToken = cookies[process.env['REFRESH_TOKEN_NAME'] || 'refresh_token'];
-  if (req.url.includes('/auth/refresh') || req.url.includes('/auth/logout')) {
+  if (req.url.includes('/auth/refresh') || req.url.includes('/auth/logout') || req.url.includes('/auth/logout')) {
     return next(req);
   }
   

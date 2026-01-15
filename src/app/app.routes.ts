@@ -13,6 +13,7 @@ import { authGuard } from './core/auth/authGuard';
 import { NotificationsComponent } from './features/notifications/notifications.component';
 import { PrivacyComponent } from './features/legal/pages/privacy.component/privacy.component';
 import { LegalNoticeComponent } from './features/legal/pages/legal-notice.component/legal-notice.component';
+import { ResetPasswordComponent } from './features/auth/components/reset-password/reset-password.component';
 
 export const routes: Routes = [
     {
@@ -84,6 +85,11 @@ export const routes: Routes = [
         path: 'discord',
         component: DiscordRedirectComponent,
         title: "EISPRI STIC"
+    },
+    {
+        path: 'reset',
+        component: ResetPasswordComponent,
+        title: "EISPRI STIC"   
     },
     {
         path: '**',

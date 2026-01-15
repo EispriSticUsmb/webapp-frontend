@@ -138,6 +138,20 @@ export class AuthService {
     );
   }
 
+  sendResetPasswordEmail(email: String): Observable<void> {
+    return this.http.post<void>("/auth/sendmail", {
+      email
+    })
+  }
+
+  resetPassword(password:string, token: String): Observable<void> {
+    const headers = new HttpHeaders();
+    headers.append('Authorization', `Bearer ${token}`);
+    return this.http.post<void>("/auth/reset", {
+      password
+    }, { headers })
+  }
+
   register(email: string, password: string, username: string, firstName: string, lastName: string, userType: UserType): Observable<void> {
     return this.http.post<{authtokens: string, user: User}>("/auth/register", {
       email, password, username, firstName, lastName, userType
