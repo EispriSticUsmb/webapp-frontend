@@ -145,11 +145,9 @@ export class AuthService {
   }
 
   resetPassword(password:string, token: String): Observable<void> {
-    const headers = new HttpHeaders();
-    headers.append('Authorization', `Bearer ${token}`);
     return this.http.post<void>("/auth/reset", {
       password
-    }, { headers })
+    }, { headers: { "Authorization" : `Bearer ${token}` } })
   }
 
   register(email: string, password: string, username: string, firstName: string, lastName: string, userType: UserType): Observable<void> {
