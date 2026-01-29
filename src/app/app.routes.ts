@@ -14,6 +14,7 @@ import { NotificationsComponent } from './features/notifications/notifications.c
 import { PrivacyComponent } from './features/legal/pages/privacy.component/privacy.component';
 import { LegalNoticeComponent } from './features/legal/pages/legal-notice.component/legal-notice.component';
 import { ResetPasswordComponent } from './features/auth/components/reset-password/reset-password.component';
+import { EventCreationComponent } from './features/admin/event-creation-component/event-creation-component';
 
 export const routes: Routes = [
     {
@@ -90,6 +91,11 @@ export const routes: Routes = [
         path: 'reset',
         component: ResetPasswordComponent,
         title: "EISPRI STIC"   
+    },
+    {
+        path: 'admin',
+        component: EventCreationComponent,
+        title: "Admin | EISPRI STIC",
     },
     {
         path: '**',

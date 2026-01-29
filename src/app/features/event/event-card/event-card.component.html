@@ -1,16 +1,21 @@
 <div class="rounded-2xl w-[360px] overflow-hidden flex flex-col bg-base100 shadow-xl">
-    <img class="border-b border-primary h-48 object-cover" [src]="imageUrl" onerror="this.src='/logo.png'" >
+    <img class="border-b border-primary h-48 w-full object-cover" [src]="displayImageUrl" onerror="this.src='/logo.png'">
     <div class="flex flex-col p-2">
         <div class="flex justify-between items-center w-full">
-            <div class="font-bold">{{event.title}}</div>
+            <div class="font-bold">{{event.title || 'Titre de l\'événement'}}</div>
             <div class="flex flex-col text-right">
                 <div>{{ event.startDate | date:'short':'Europe/Paris':'fr-FR' }}</div>
                 <div>{{ event.location }}</div>
             </div>
         </div>
         <div class="mt-4 line-clamp-3 pr-5 min-h-[72px] text-justify">
-            {{ event.descriptionSummary }}
+            {{ event.descriptionSummary || event.description }}
         </div>
-        <a class="btn-secondary text-center cursor-pointer mt-6" [routerLink]="['/event',event.id]">En savoir plus</a>
+        <a class="btn-secondary text-center cursor-pointer mt-6" 
+           [class.pointer-events-none]="!event.id" 
+           [class.opacity-50]="!event.id"
+           [routerLink]="event.id ? ['/event', event.id] : []">
+           En savoir plus
+        </a>
     </div>
 </div>

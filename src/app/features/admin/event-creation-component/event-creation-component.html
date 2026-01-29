@@ -1,0 +1,143 @@
+<div class="container mx-auto max-w-2xl pb-10">
+  <h2 class="m-3 text-3xl text-center font-bold">Créer un Événement</h2>
+
+  <div class="flex justify-center my-8">
+    <event-card 
+        [event]="previewEvent" 
+        [previewImage]="imagePreview()">
+    </event-card>
+  </div>
+
+  <form [formGroup]="eventForm" (submit)="submit()" class="flex flex-col items-center gap-5 mt-6 px-4">
+    
+    @if(errorMessage()) {
+      <p class="my-3 p-0.5 rounded-sm px-4 text-error-content bg-error w-full text-center">{{ errorMessage() }}</p>
+    }
+
+    <div class="w-full">
+      <label class="block text-sm font-medium mb-1 pl-1">Image de couverture</label>
+      <input type="file" (change)="onFileSelected($event)" accept="image/*" 
+          class="file-input file-input-bordered file-input-primary w-full" />
+    </div>
+
+    <div class="w-full">
+        <label class="relative" for="title">
+          <input id="title" class="peer mt-0.5 w-full rounded shadow-sm outline-0 sm:text-sm border-2 p-2"
+            [class]="(f['title'].invalid && (f['title'].dirty || f['title'].touched)) ? 'border-error' : 'border-base300 focus:border-primary'"
+            placeholder="" formControlName="title" />
+          <span class="absolute inset-y-0 start-3 -translate-y-5 bg-base-100 px-0.5 text-sm font-medium transition-transform peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-5">
+            Titre
+          </span>
+        </label>
+        @if (f['title'].invalid && (f['title'].dirty || f['title'].touched)) {
+            <span class="block text-error text-sm mt-1">Le titre est requis !</span>
+        }
+    </div>
+
+    <div class="flex flex-col md:flex-row w-full gap-4">
+        <div class="w-full md:w-1/2">
+          <label class="text-xs font-bold ml-1 text-base-content/60">Début</label>
+          <input type="datetime-local" formControlName="startDate"
+              class="w-full rounded shadow-sm outline-0 sm:text-sm border-2 p-2 border-base300 focus:border-primary" />
+        </div>
+        <div class="w-full md:w-1/2">
+          <label class="text-xs font-bold ml-1 text-base-content/60">Fin</label>
+          <input type="datetime-local" formControlName="endDate"
+              class="w-full rounded shadow-sm outline-0 sm:text-sm border-2 p-2 border-base300 focus:border-primary" />
+        </div>
+    </div>
+
+    <div class="flex flex-col md:flex-row w-full gap-4">
+        <div class="w-full md:w-1/2">
+          <label class="text-xs font-bold ml-1 text-base-content/60">Début Inscriptions</label>
+          <input type="datetime-local" formControlName="registrationStart"
+              class="w-full rounded shadow-sm outline-0 sm:text-sm border-2 p-2 border-base300 focus:border-primary" />
+        </div>
+        <div class="w-full md:w-1/2">
+          <label class="text-xs font-bold ml-1 text-base-content/60">Fin Inscriptions</label>
+          <input type="datetime-local" formControlName="registrationEnd"
+              class="w-full rounded shadow-sm outline-0 sm:text-sm border-2 p-2 border-base300 focus:border-primary" />
+        </div>
+    </div>
+
+    <div class="w-full">
+      <label class="relative" for="location">
+        <input id="location" class="peer mt-0.5 w-full rounded shadow-sm outline-0 sm:text-sm border-2 p-2 border-base300 focus:border-primary"
+          placeholder="" formControlName="location" />
+        <span class="absolute inset-y-0 start-3 -translate-y-5 bg-base-100 px-0.5 text-sm font-medium transition-transform peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-5">
+          Lieu
+        </span>
+      </label>
+    </div>
+
+    <div class="w-full">
+        <label class="relative" for="maxParticipants">
+          <input type="number" id="maxParticipants" class="peer mt-0.5 w-full rounded shadow-sm outline-0 sm:text-sm border-2 p-2 border-base300 focus:border-primary"
+            placeholder="" formControlName="maxParticipants" />
+          <span class="absolute inset-y-0 start-3 -translate-y-5 bg-base-100 px-0.5 text-sm font-medium transition-transform peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-5">
+            Nombre max participants
+          </span>
+        </label>
+      </div>
+
+    <div class="w-full">
+      <label class="relative" for="summary">
+        <textarea id="summary" rows="2"
+          class="peer mt-0.5 w-full rounded shadow-sm outline-0 sm:text-sm border-2 p-2 border-base300 focus:border-primary bg-transparent"
+          placeholder="" formControlName="descriptionSummary"></textarea>
+        <span class="absolute start-3 -translate-y-5 bg-base-100 px-0.5 text-sm font-medium transition-transform peer-placeholder-shown:translate-y-2 peer-focus:-translate-y-5">
+          Résumé court (pour la carte)
+        </span>
+      </label>
+    </div>
+
+    <div class="w-full">
+      <label class="relative" for="desc">
+        <textarea id="desc" rows="5"
+          class="peer mt-0.5 w-full rounded shadow-sm outline-0 sm:text-sm border-2 p-2 bg-transparent"
+          [class]="(f['description'].invalid && (f['description'].dirty || f['description'].touched)) ? 'border-error' : 'border-base300 focus:border-primary'"
+          placeholder="" formControlName="description"></textarea>
+        <span class="absolute start-3 -translate-y-5 bg-base-100 px-0.5 text-sm font-medium transition-transform peer-placeholder-shown:translate-y-2 peer-focus:-translate-y-5">
+          Description complète
+        </span>
+      </label>
+      @if (f['description'].invalid && (f['description'].dirty || f['description'].touched)) {
+          <span class="block text-error text-sm mt-1">La description est requise !</span>
+      }
+    </div>
+
+    <div class="w-full mb-3">
+      <p class="mb-2 pl-1 font-medium">Configuration des équipes</p>
+      <div class="flex items-center gap-4">
+          <label class="cursor-pointer label border border-secondary rounded px-4 has-checked:bg-base300 has-checked:border-primary">
+              <span class="label-text mr-2">Individuel</span> 
+              <input type="radio" [value]="false" formControlName="allowTeams" class="radio radio-primary" />
+          </label>
+          <label class="cursor-pointer label border border-secondary rounded px-4 has-checked:bg-base300 has-checked:border-primary">
+              <span class="label-text mr-2">En Équipe</span> 
+              <input type="radio" [value]="true" formControlName="allowTeams" class="radio radio-primary" />
+          </label>
+      </div>
+    </div>
+
+    @if(eventForm.get('allowTeams')?.value) {
+        <div class="w-full animate-fade-in-down">
+          <label class="relative" for="teamSize">
+            <input type="number" id="teamSize" class="peer mt-0.5 w-full rounded shadow-sm outline-0 sm:text-sm border-2 p-2 border-base300 focus:border-primary"
+              placeholder="" formControlName="maxTeamSize" />
+            <span class="absolute inset-y-0 start-3 -translate-y-5 bg-base-100 px-0.5 text-sm font-medium transition-transform peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-5">
+              Taille max par équipe
+            </span>
+          </label>
+          @if (f['maxTeamSize'].hasError('min')) {
+              <span class="block text-error text-sm mt-1">Minimum 2 personnes !</span>
+          }
+        </div>
+    }
+
+    <button type="submit" [disabled]="eventForm.invalid || isSubmitting()" class="cursor-pointer btn-primary w-full mt-4 disabled:cursor-not-allowed flex justify-center items-center gap-2">
+      @if(isSubmitting()) { <span class="loading loading-spinner"></span> }
+      Créer l'événement
+    </button>
+  </form>
+</div>

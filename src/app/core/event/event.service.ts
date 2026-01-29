@@ -170,4 +170,28 @@ export class EventService {
       );
       this._allEvents$.next(newEvents);
   }
+createEvent(formValues: any): Observable<Event> {
+    const body = {
+      title: formValues.title,
+      description: formValues.description,
+      descriptionSummary: formValues.descriptionSummary || undefined,
+      location: formValues.location || undefined,
+      externalLink: formValues.externalLink || undefined,
+      allowTeams: formValues.allowTeams,
+      maxParticipants: formValues.maxParticipants ? Number(formValues.maxParticipants) : undefined,
+      maxTeamSize: formValues.maxTeamSize ? Number(formValues.maxTeamSize) : undefined,
+      startDate: formValues.startDate ? new Date(formValues.startDate).toISOString() : undefined,
+      endDate: formValues.endDate ? new Date(formValues.endDate).toISOString() : undefined,
+      registrationStart: formValues.registrationStart ? new Date(formValues.registrationStart).toISOString() : undefined,
+      registrationEnd: formValues.registrationEnd ? new Date(formValues.registrationEnd).toISOString() : undefined,
+    };
+
+    return this.http.post<Event>('events/', body);
+  }
+  
+  putEventImg(eventId: string, file: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('eventImage', file);
+    return this.http.put(`events/${eventId}/eventImage`, formData);
+  }
 }
