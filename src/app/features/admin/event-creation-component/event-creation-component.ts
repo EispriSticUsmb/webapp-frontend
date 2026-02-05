@@ -96,16 +96,16 @@ export class EventCreationComponent {
           this.eventService.putEventImg(newEvent.id, this.selectedFile).subscribe({
             next: () => {
                 this.isSubmitting.set(false);
-                this.router.navigate(['/admin/events']);
+                this.router.navigate(['/event',newEvent.id]);
             },
             error: () => {
                 this.isSubmitting.set(false);
-                this.router.navigate(['/admin/events']); 
+                this.router.navigate(['/event',newEvent.id]); 
             }
           });
         } else {
           this.isSubmitting.set(false);
-          this.router.navigate(['/admin/events']);
+          this.router.navigate(['/event',newEvent.id]);
         }
       },
       error: (err) => {

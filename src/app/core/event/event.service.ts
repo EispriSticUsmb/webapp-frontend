@@ -186,7 +186,16 @@ createEvent(formValues: any): Observable<Event> {
       registrationEnd: formValues.registrationEnd ? new Date(formValues.registrationEnd).toISOString() : undefined,
     };
 
-    return this.http.post<Event>('events/', body);
+    return this.http.post<Event>('events/', body).pipe(
+      tap((newEvent: Event) => {
+        const currentEvents = this._allEvents$.value;
+        if (currentEvents) {
+          this._allEvents$.next([...currentEvents, newEvent]);
+        } else {
+          this._allEvents$.next([newEvent]);
+        }
+      })
+    );
   }
   
   putEventImg(eventId: string, file: File): Observable<any> {
