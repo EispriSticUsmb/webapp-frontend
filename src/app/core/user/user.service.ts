@@ -52,19 +52,11 @@ export class UserService {
             user.profileImage = this.default_pdp(user.userType);
           }
           else {
-            if (isPlatformBrowser(this.platformId)) {
-                let envApiUrl = environment.apiUrl;
-                if(envApiUrl.endsWith('/')){
-                envApiUrl = envApiUrl.substring(0, envApiUrl.length - 1);
-                }
-                user.profileImage = envApiUrl + '/users/' + user.id + '/profileImage';
-            } else {
-                let envApiUrl = process.env['API_URL_SSR'] || environment.apiUrl;
-                if(envApiUrl.endsWith('/')){
-                    envApiUrl = envApiUrl.substring(0, envApiUrl.length - 1);
-                }
-                user.profileImage = envApiUrl + '/users/' + user.id + '/profileImage';
+            let envApiUrl = environment.apiUrl;
+            if(envApiUrl.endsWith('/')){
+            envApiUrl = envApiUrl.substring(0, envApiUrl.length - 1);
             }
+            user.profileImage = envApiUrl + '/users/' + user.id + '/profileImage';
           }
           return user;
         })
