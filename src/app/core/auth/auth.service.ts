@@ -193,7 +193,6 @@ export class AuthService {
       tap(res => this.accessToken$.next(res.accessToken)),
       map(res => res.accessToken),
       catchError(err => {
-        this.logout();
         return throwError(() => err);
       })
     );

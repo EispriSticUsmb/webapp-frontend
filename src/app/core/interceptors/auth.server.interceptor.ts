@@ -1,8 +1,8 @@
 import { AuthService } from './../auth/auth.service';
 import {  HttpEvent, HttpHandlerFn, HttpRequest } from '@angular/common/http';
-import { inject, makeStateKey, REQUEST, StateKey, TransferState } from '@angular/core';
+import { inject, REQUEST } from '@angular/core';
 import { BehaviorSubject, Observable, throwError} from 'rxjs';
-import { switchMap, catchError, take, skip} from 'rxjs/operators';
+import { switchMap, catchError, take, filter} from 'rxjs/operators';
 
 function parseCookies(cookieString: string): Record<string, string> {
   if (!cookieString) return {};
@@ -30,11 +30,6 @@ export function authInterceptorServer(
     return next(req);
   }
   
-  const transferState = inject(TransferState);
-  const key: StateKey<string> = makeStateKey<string>(
-      'transfer-' + req.urlWithParams
-    );
-
   if (!refreshToken) {
     return next(req);
   }
@@ -71,7 +66,7 @@ function handle401Error(
     );
   } else {
     return refreshTokenSubject.pipe(
-      skip(1),
+      filter(token => token !== null),
       take(1),
       switchMap(token => {
         if (token) {
