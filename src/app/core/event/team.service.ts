@@ -35,7 +35,7 @@ export class TeamService {
     return this.http.post<TeamInvitation>(`teams/${teamId}/invitations`,{ identifier })
   }
 
-  RespondInvByTeam(teamId : string, userId: string, answer: boolean) : Observable<EventParticipant | undefined> {
-    return this.http.post<EventParticipant | undefined>(`teams/${teamId}/invitations/${userId}/respond`,{ answer })
+  RespondInvByTeam(teamId : string, userId: string, answer: boolean, additionalInfo?: string) : Observable<EventParticipant | undefined> {
+    return this.http.post<EventParticipant | undefined>(`teams/${teamId}/invitations/${userId}/respond`,{ answer, additionalInfo })
   }
 }

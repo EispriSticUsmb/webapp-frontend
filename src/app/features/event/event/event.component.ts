@@ -39,10 +39,19 @@ export class EventComponent implements OnInit,OnDestroy{
   userId = signal<string | null>(null);
   userSubscription!: Subscription;
   mainButtonIsLoading = signal<boolean>(false);
-
+  popupInfoRequest = signal<boolean>(false);
+  valueInfoRequest? : string;
   form = new FormGroup({
     name: new FormControl('', [Validators.required, Validators.maxLength(64)])
   });
+
+  formInfoRequest = new FormGroup({
+    infoRequestFormControl: new FormControl('', [Validators.required])
+  });
+
+  get infoRequestFormControl() {
+    return this.formInfoRequest.get('infoRequestFormControl')!;
+  }
 
   get name() {
     return this.form.get('name')!;
@@ -61,10 +70,14 @@ export class EventComponent implements OnInit,OnDestroy{
       } 
       this.isDisabled.set(this.ButtonDisableState());
     });
+    this.valueInfoRequest = undefined;
     this.mainButtonIsLoading.set(false);
     this.createTeamButtonInProgress.set(false);
     this.errorMessage.set(null);
+
     this.popup.set(false);
+    this.popupInfoRequest.set(false);
+
     this.eventId = this.route.snapshot.paramMap.get('id')!;
     this.imageUrl = environment.apiUrl+'/events/'+this.eventId+'/eventImage';
     this.sub = this.eventService.findEventById(this.eventId).subscribe(res => {
@@ -111,10 +124,14 @@ export class EventComponent implements OnInit,OnDestroy{
     this.popup.set(false);
   }
 
+  closePopUpInfoRequest(): void {
+    this.popupInfoRequest.set(false);
+  }
+
   createTeam(): void {
     if(this.name.invalid) return;
     this.createTeamButtonInProgress.set(true);
-    this.eventService.createTeam(this.name.value!, this.event()!).subscribe(
+    this.eventService.createTeam(this.name.value!, this.event()!, this.valueInfoRequest).subscribe(
       {
         next: (team) => {
           this.createTeamButtonInProgress.set(false);
@@ -133,6 +150,14 @@ export class EventComponent implements OnInit,OnDestroy{
         }
       }
     );
+  }
+
+  buttonUserInfo(): void {
+    if (this.formInfoRequest.valid) {
+      this.valueInfoRequest = this.infoRequestFormControl.value!;
+      this.popupInfoRequest.set(false);
+      this.buttonEvent();
+    }
   }
 
   buttonEvent(): void {
@@ -168,13 +193,17 @@ export class EventComponent implements OnInit,OnDestroy{
         }
       } else {
         if(this.eventService.AreInscriptionAllowed(event)) {
+          if(event?.askUserInfo && !this.valueInfoRequest) {
+            this.popupInfoRequest.set(true);
+            return;
+          }
           if(event.allowTeams) {
             this.popup.set(true);
             return;
           }
           else {
             this.mainButtonIsLoading.set(true);
-            this.eventService.joinEvent(this.eventId, this.userId()!).subscribe({
+            this.eventService.joinEvent(this.eventId, this.userId()!, this.valueInfoRequest).subscribe({
               next: () => {
                 this.mainButtonIsLoading.set(false);
                 this.errorMessage.set(null);
@@ -193,5 +222,6 @@ export class EventComponent implements OnInit,OnDestroy{
         }
       }
     }
+    this.valueInfoRequest = undefined;
   }
 }

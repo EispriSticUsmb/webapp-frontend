@@ -1,3 +1,38 @@
+@if(popupInfoRequest()) {
+    <popup (clickOutside)="closePopUpInfoRequest()">
+        <div class="m-5" [innerHTML]="this.event?.userInfoRequest"></div>
+        <div class="flex justify-center flex-col h-full m-5">
+            <form class="text-center" (ngSubmit)="buttonUserInfo()" [formGroup]="formInfoRequest">
+                <label 
+                class="relative mt-3"
+                for="formInfoRequestId"
+                >
+                <input
+                    id="formInfoRequestId"
+                    class="peer mt-0.5 w-full rounded shadow-sm sm:text-sm border-2 outline-0 p-2"
+                    [class]=" (infoRequestFormControl.invalid && (infoRequestFormControl.dirty || infoRequestFormControl.touched)) ? 'border-error' : 'border-base300 focus:border-primary'"
+                    placeholder=""
+                    formControlName="infoRequestFormControl"
+                />
+                <span
+                    class="absolute inset-y-0 start-3 -translate-y-5 bg-base100 px-0.5 text-sm font-medium transition-transform peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-5"
+                >
+                    Réponse
+                </span>
+                </label>
+                <div class="mb-3">
+                    @if (formInfoRequest.invalid && (formInfoRequest.dirty || formInfoRequest.touched)) {
+                        <span class="block text-red-600 text-sm">Veuillez répondre !</span>
+                    }
+                </div>
+                
+                <button type="submit" class="btn-primary" [disabled]="formInfoRequest.invalid">
+                    Créer
+                </button>
+            </form>
+        </div>
+    </popup>
+}
 @if(popup()) {
     <popup (clickOutside)="closePopUp()">
         <div class="flex justify-center flex-col h-full m-5">

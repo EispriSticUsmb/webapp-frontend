@@ -45,6 +45,18 @@ export class TeamComponent implements OnInit, OnDestroy {
   event :Event | undefined;
   popup = signal<boolean>(false);
   resInv = signal<boolean>(false);
+
+  popupInfoRequest = signal<boolean>(false);
+  valueInfoRequest? : string;
+
+  formInfoRequest = new FormGroup({
+    infoRequestFormControl: new FormControl('', [Validators.required])
+  });
+
+  get infoRequestFormControl() {
+    return this.formInfoRequest.get('infoRequestFormControl')!;
+  }
+
   invitedUser = computed(() => {
     return this.inviteds().find(u => u.id === this.user()?.id) ?? null;
   });
@@ -62,6 +74,8 @@ export class TeamComponent implements OnInit, OnDestroy {
     return this.form.get('name')!;
   }
   ngOnInit(): void {
+    this.valueInfoRequest = undefined;
+    this.popupInfoRequest.set(false);
     this.userSub = this.auth.user$.subscribe(
       user => this.user.set(user ? { ...user } : null)
     ) 
@@ -98,6 +112,18 @@ export class TeamComponent implements OnInit, OnDestroy {
         }
       );
       this.socket.emitSubscribeWsEvent("teams/"+this.teamId);
+    }
+  }
+
+  closePopUpInfoRequest(): void {
+    this.popupInfoRequest.set(false);
+  }
+
+  buttonUserInfo(): void {
+    if (this.formInfoRequest.valid) {
+      this.valueInfoRequest = this.infoRequestFormControl.value!;
+      this.popupInfoRequest.set(false);
+      this.acceptInv();
     }
   }
 
@@ -270,9 +296,13 @@ export class TeamComponent implements OnInit, OnDestroy {
 
   acceptInv() {
     if(this.resInv()) return;
+    if(this.event?.askUserInfo && !this.valueInfoRequest) {
+      this.popupInfoRequest.set(true);
+      return;
+    }
     const user = this.user()!;
     this.resInv.set(true);
-    this.teamService.RespondInvByTeam(this.teamId, user.id, true).subscribe({
+    this.teamService.RespondInvByTeam(this.teamId, user.id, true, this.valueInfoRequest).subscribe({
       next: (NewEventParticipant) => {
         if(NewEventParticipant) {
           this.team.update(team => {

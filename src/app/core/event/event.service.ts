@@ -93,8 +93,8 @@ export class EventService {
     return !!user?.participations?.some(u => u.eventId === eventId);
   }
 
-  createTeam(teamName: string, event: Event): Observable<Team> {
-    return this.http.post<Team>(`events/${event.id}/teams`, {name: teamName}).pipe(
+  createTeam(teamName: string, event: Event, additionalInfo?: string): Observable<Team> {
+    return this.http.post<Team>(`events/${event.id}/teams`, {name: teamName, additionalInfo}).pipe(
       tap( team => {
         event?.teams?.push({
           id: team.id,
@@ -119,8 +119,8 @@ export class EventService {
     );
   }
 
-  joinEvent(eventId: string, userId: string): Observable<void> {
-    return this.http.post<void>(`events/${eventId}/participants`, { userId }).pipe(
+  joinEvent(eventId: string, userId: string, additionalInfo?: string): Observable<void> {
+    return this.http.post<void>(`events/${eventId}/participants`, { userId, additionalInfo }).pipe(
       tap(
         () => {
           const user = this.auth._user$.value!;

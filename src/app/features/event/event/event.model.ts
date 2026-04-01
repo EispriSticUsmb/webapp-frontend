@@ -21,6 +21,9 @@ export interface Event {
   allowTeams: boolean;
   maxTeamSize?: number;
 
+  askUserInfo: boolean;
+  userInfoRequest?: string;
+
   externalLink?: string;
 
   createdAt: Date;

@@ -65,7 +65,9 @@ function handle401Error(
       }),
       catchError(err => {
         isRefreshing = false;
-        authService.logout();
+        if(err.status === 401) {
+          authService.logout();
+        }
         return throwError(() => err);
       })
     );
