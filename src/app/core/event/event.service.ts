@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, catchError, map, Observable, of, tap } from 'rxjs';
 import { AuthService } from '../auth/auth.service';
 import { Team } from '../../features/team/team.modele';
+import { EventParticipant } from './model/participant';
 
 @Injectable({
   providedIn: 'root'
@@ -202,5 +203,9 @@ createEvent(formValues: any): Observable<Event> {
     const formData = new FormData();
     formData.append('eventImage', file);
     return this.http.put(`events/${eventId}/eventImage`, formData);
+  }
+
+  getEventParticipants(eventId: string): Observable<EventParticipant[]> {
+    return this.http.get<EventParticipant[]>(`events/${eventId}/participants`);
   }
 }

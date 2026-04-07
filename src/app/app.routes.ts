@@ -15,6 +15,7 @@ import { PrivacyComponent } from './features/legal/pages/privacy.component/priva
 import { LegalNoticeComponent } from './features/legal/pages/legal-notice.component/legal-notice.component';
 import { ResetPasswordComponent } from './features/auth/components/reset-password/reset-password.component';
 import { EventCreationComponent } from './features/admin/event-creation-component/event-creation-component';
+import { EventParticipantComponents } from './features/admin/event-participants/event-participants-component';
 
 export const routes: Routes = [
     {
@@ -49,7 +50,8 @@ export const routes: Routes = [
         path: 'event',
         children: [
             { path: '', redirectTo: '/events', pathMatch: 'full'},
-            { path: ':id', component: EventComponent }
+            { path: ':id', component: EventComponent },
+            { path: ':id/participants', component: EventParticipantComponents },
         ],
         title: "Événement | EISPRI STIC"
     },

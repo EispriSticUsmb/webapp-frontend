@@ -1,0 +1,52 @@
+@switch (status()) {
+    @case ('found') {
+        <div class="container mx-auto px-4 pb-10">
+            <h2 class="my-10 text-center text-4xl font-bold animate-[typing]">
+                @if(participants().length === 0) {
+                    Aucun Participant
+                } @else {
+                    {{ participants().length }} participants
+                }
+            </h2>
+
+            <div class="flex flex-col items-center gap-4">
+                @for (participant of participants(); track participant.id) {
+                    <div class="flex flex-col md:flex-row items-center justify-between min-w-[350px] w-11/12 md:w-1/2 bg-base-300 p-3 rounded-2xl hover:bg-secondary hover:text-secondary-content transition-colors duration-200">
+                        
+                        <div class="flex items-center gap-4 w-full md:w-2/3">
+                            <img 
+                                class="w-14 h-14 rounded-full object-cover border-2 border-transparent hover:border-current" 
+                                [src]="participant.user.profileImage || '/assets/default-avatar.png'" 
+                                alt="Photo de profil de {{ participant.user.username }}"
+                            >
+                            
+                            <div class="flex flex-col flex-1 overflow-hidden">
+                                <p class="font-bold text-lg truncate">
+                                    {{ participant.user.username }}
+                                </p>
+                                <p class="text-sm opacity-80 truncate">
+                                    {{ participant.user.firstName }} {{ participant.user.lastName }}
+                                </p>
+                            </div>
+                        </div>
+
+                        @if (participant.additionalInfo) {
+                            <div class="w-full md:w-1/3 mt-3 md:mt-0 pt-2 md:pt-0 md:pl-4 text-sm italic opacity-75 border-t md:border-t-0 md:border-l border-base-content/20 text-center md:text-left">
+                                {{ participant.additionalInfo }}
+                            </div>
+                        }
+
+                    </div>
+                }
+            </div>
+        </div>
+    }
+    
+    @case ('loading') {
+        <spinner></spinner>
+    }
+    
+    @default {
+        <app-not-found></app-not-found>
+    }
+}
